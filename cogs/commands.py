@@ -18,6 +18,7 @@ class UserCommands(commands.Cog):
     @commands.group(invoke_without_command=True, aliases=['message'])
     async def messages(self, ctx, user: discord.Member, amount:int = 10):
         if amount <= lookback_maxamount:
+            add_fetch(ctx, "Message")
             data = conn.execute(
                 "SELECT * FROM messages WHERE Author = ? LIMIT ?", (str(user), amount) 
             )
@@ -30,6 +31,7 @@ class UserCommands(commands.Cog):
     @messages.command()
     async def between(self, ctx, raw_date1: str, raw_date2: str, amount:int = 10):
         if amount <= lookback_maxamount:
+            add_fetch(ctx, "Message")
             date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
             date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
             data = conn.execute(
@@ -45,6 +47,7 @@ class UserCommands(commands.Cog):
     @messages.command()
     async def contains(self, ctx, keyword: str, amount: int = 10):
         if amount <= lookback_maxamount:
+            add_fetch(ctx, "Message")
             data = conn.execute(
                 "SELECT * FROM messages WHERE Content LIKE ? LIMIT ?",
                 ('%{}%'.format(str(keyword)), int(amount))
@@ -65,6 +68,14 @@ def log_to_message(data):
             i += 1
     return message
 
+
+def add_fetch(ctx, type):
+    conn.execute(
+        "INSERT INTO logfetches(FetchDate, Author, FetchType) VALUES(?, ?, ?)",
+        (ctx.message.created_at, str(ctx.author), str(type))
+    )
+
+    conn.commit()
 
 
 def setup(bot):
