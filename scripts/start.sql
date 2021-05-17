@@ -13,3 +13,10 @@ CREATE TABLE edits(
     OriginalContent TEXT,
     EditedContent TEXT
 );
+
+CREATE TABLE logfetches(
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    FetchDate DATE,
+    Author TEXT,
+    FetchType VARCHAR(10)
+)
