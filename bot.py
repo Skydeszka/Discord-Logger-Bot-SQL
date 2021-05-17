@@ -1,19 +1,22 @@
-# Imoprt Discord.py modules
+# Import discord.py modules
 import discord
 from discord.ext import commands
-import sqlite3
 
-# Import IO for working with files
+
+# Import other modules
+import sqlite3
 import io
-from datetime import date, datetime as dt
+import os
+
 
 # Read token from token.secret file
 # .secret files are inside .gitignore
 token = io.open("./database/token.secret", mode="r").read()
 
+
 # Create bot and give default intents
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!log", intents=intents)
+bot = commands.Bot(command_prefix="!log ", intents=intents)
 
 
 # Connect to database
@@ -35,7 +38,7 @@ async def on_message(message):
 # Executes function on every message edit that the bot sees
 @bot.event
 async def on_message_edit(before, after):
-    pass
+    add_edit(before, after)
 
 
 # Functions
@@ -55,12 +58,27 @@ def add_message(msg: discord.Message):
     conn.commit()
 
 
+def add_edit(bef: discord.Message, aft: discord.Message):
+    conn.execute(
+        "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?)",
+        (int(aft.id), str(aft.author), bef.created_at, aft.edited_at, str(bef.content), str(aft.content))
+    )
+
+    conn.commit()
+
+
 # Creates database
 if __name__ == "__main__":
     try:
         build_database()
     except sqlite3.OperationalError as err:
         print(err)
+
+
+# Search for cogs
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
 
 # Starts the bot
