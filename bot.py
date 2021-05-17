@@ -16,7 +16,7 @@ token = io.open("./database/token.secret", mode="r").read()
 
 # Create bot and give default intents
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!log ", intents=intents)
+bot = commands.Bot(command_prefix="!log.", intents=intents)
 
 
 # Connect to database
