@@ -11,12 +11,18 @@ import os
 
 # Read token from token.secret file
 # .secret files are inside .gitignore
-token = io.open("./database/token.secret", mode="r").read()
+token = None
+try:
+    token = io.open("./database/token.secret", mode="r").read()
+except FileNotFoundError:
+    print(
+        "New error encountered: FileNotFound\n\tdatabase/token.secret\tnot found."
+        "\nTo fix this error create a token.secret file with the token of the Discord bot inside it."
+        )
 
 
 # Create bot and give default intents
-intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!log.", intents=intents)
+bot = commands.Bot(command_prefix="!log ")
 
 
 # Connect to database
@@ -33,12 +39,14 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     add_message(message)
+    await bot.process_commands(message)
 
 
 # Executes function on every message edit that the bot sees
 @bot.event
 async def on_message_edit(before, after):
     add_edit(before, after)
+    await bot.process_commands(after)
 
 
 # Functions
@@ -75,11 +83,12 @@ if __name__ == "__main__":
         print(err)
 
 
-# Search for cogs
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        bot.load_extension(f'cogs.{filename[:-3]}')
+# Starts the bot and loads cogs
+if token is not None:
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            bot.load_extension(f'cogs.{filename[:-3]}')
 
-
-# Starts the bot
-bot.run(token)
+    bot.run(token)
+else:
+    input("Press anything to continue")
