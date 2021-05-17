@@ -1,5 +1,6 @@
 # Import discord.py modules
 import discord
+from discord import message
 from discord.ext import commands
 
 
@@ -22,7 +23,7 @@ except FileNotFoundError:
 
 
 # Create bot and give default intents
-bot = commands.Bot(command_prefix="!log ")
+bot = commands.Bot(command_prefix="!log.")
 
 
 # Connect to database
@@ -38,14 +39,16 @@ async def on_ready():
 # Executes function on every message that the bot sees
 @bot.event
 async def on_message(message):
-    add_message(message)
+    if not message.author.bot:
+        add_message(message)
     await bot.process_commands(message)
 
 
 # Executes function on every message edit that the bot sees
 @bot.event
 async def on_message_edit(before, after):
-    add_edit(before, after)
+    if not after.author.bot:
+        add_edit(before, after)
     await bot.process_commands(after)
 
 
