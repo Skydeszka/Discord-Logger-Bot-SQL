@@ -13,7 +13,7 @@ class ErrorHandler(commands.Cog):
         print("Error handler cog ready")
 
 
-    # RUNS ON EVERY ERROR
+    # Function runs on every update
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.MemberNotFound):
