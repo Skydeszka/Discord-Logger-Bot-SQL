@@ -15,6 +15,14 @@ class ErrorHandler(commands.Cog):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.MemberNotFound):
             await ctx.send("Error:\nMember does not exist.\n||{}||".format(ctx.author.mention))
+        elif isinstance(error, commands.errors.MissingRequiredArgument):
+            await ctx.send("Error:\nRequired argument missing.\n||{}||".format(ctx.author.mention))
+        else:
+            await ctx.send(
+                "Unhandled Error:\n"
+                "{}\n"
+                "||{}||".format(error, ctx.author.mention)
+                )
 
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))
