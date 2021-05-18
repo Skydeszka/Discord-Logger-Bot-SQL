@@ -62,8 +62,8 @@ def build_database():
 
 def add_message(msg: discord.Message):
     conn.execute(
-        "INSERT INTO messages VALUES(?, ?, ?, ?)",
-        (int(msg.id), str(msg.author), msg.created_at, str(msg.content))
+        "INSERT INTO messages VALUES(?, ?, ?, ?, ?)",
+        (int(msg.id), str(msg.author), int(msg.author.id), msg.created_at, str(msg.content))
     )
 
     conn.commit()
@@ -71,8 +71,8 @@ def add_message(msg: discord.Message):
 
 def add_edit(bef: discord.Message, aft: discord.Message):
     conn.execute(
-        "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?)",
-        (int(aft.id), str(aft.author), bef.created_at, aft.edited_at, str(bef.content), str(aft.content))
+        "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?, ?)",
+        (int(aft.id), str(aft.author), int(aft.author.id), bef.created_at, aft.edited_at, str(bef.content), str(aft.content))
     )
 
     conn.commit()
