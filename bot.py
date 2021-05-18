@@ -1,6 +1,5 @@
 # Import discord.py modules
 import discord
-from discord import message
 from discord.ext import commands
 
 
@@ -8,6 +7,8 @@ from discord.ext import commands
 import sqlite3
 import io
 import os
+from datetime import datetime as dt
+from time import time
 
 
 # Read token from token.secret file
@@ -63,7 +64,7 @@ def build_database():
 def add_message(msg: discord.Message):
     conn.execute(
         "INSERT INTO messages VALUES(?, ?, ?, ?, ?)",
-        (int(msg.id), str(msg.author), int(msg.author.id), msg.created_at, str(msg.content))
+        (int(msg.id), str(msg.author), int(msg.author.id), date_utc_to_local(msg.created_at), str(msg.content))
     )
 
     conn.commit()
@@ -72,10 +73,18 @@ def add_message(msg: discord.Message):
 def add_edit(bef: discord.Message, aft: discord.Message):
     conn.execute(
         "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?, ?)",
-        (int(aft.id), str(aft.author), int(aft.author.id), bef.created_at, aft.edited_at, str(bef.content), str(aft.content))
+        (int(aft.id), str(aft.author), int(aft.author.id),
+        date_utc_to_local(bef.created_at), date_utc_to_local(aft.edited_at),
+        str(bef.content), str(aft.content))
     )
 
     conn.commit()
+
+
+def date_utc_to_local(utc_datetime):
+    now_timestamp = time()
+    offset = dt.fromtimestamp(now_timestamp) - dt.utcfromtimestamp(now_timestamp)
+    return utc_datetime + offset
 
 
 # Creates database
