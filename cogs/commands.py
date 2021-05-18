@@ -114,7 +114,7 @@ class UserCommands(commands.Cog):
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
-
+    # NOT WORKING
     # Prints last {amount} of messages which contains the given keyword sent by a specified user between the two given dates
     @messages.command()
     async def containsfrombetween(self, ctx, keyword: str, user: discord.Member, raw_date1: str, raw_date2: str, amount: int = 10):
