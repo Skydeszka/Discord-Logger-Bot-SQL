@@ -1,5 +1,4 @@
 import discord
-from discord import message
 from discord.ext import commands
 from datetime import datetime as dt
 from bot import conn
@@ -18,9 +17,8 @@ class UserCommands(commands.Cog):
     @commands.group(invoke_without_command=True, aliases=['message'])
     async def messages(self, ctx, user: discord.Member, amount:int = 10):
         if amount <= lookback_maxamount:
-            add_fetch(ctx, "Message")
             data = conn.execute(
-                "SELECT * FROM messages WHERE Author = ? LIMIT ?", (str(user), amount) 
+                "SELECT * FROM messages WHERE AuthorID = ? LIMIT ?", (int(user.id), amount) 
             )
 
             message = log_to_message(data)
@@ -31,23 +29,42 @@ class UserCommands(commands.Cog):
     @messages.command()
     async def between(self, ctx, raw_date1: str, raw_date2: str, amount:int = 10):
         if amount <= lookback_maxamount:
-            add_fetch(ctx, "Message")
-            date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
-            date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
-            data = conn.execute(
-                "SELECT * FROM messages WHERE DateOfMessage BETWEEN ? AND ? ORDER BY DateOfMessage",
-                (date1, date2)
-            )
+            try:
+                date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
+                date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
+                data = conn.execute(
+                    "SELECT * FROM messages WHERE DateOfMessage BETWEEN ? AND ? ORDER BY DateOfMessage",
+                    (date1, date2)
+                )
 
-            message = log_to_message(data)
+                message = log_to_message(data)
 
-            await ctx.send(message)
+                await ctx.send(message)
+            except ValueError:
+                await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
             
+
+    @messages.command()
+    async def betweenfrom(self, ctx, raw_date1: str, raw_date2: str, user: discord.Member, amount:int = 10):
+        if amount <= lookback_maxamount:
+            try:
+                date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
+                date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
+                data = conn.execute(
+                    "SELECT * FROM messages WHERE AuthorID = ? AND DateOfMessage BETWEEN ? AND ? ORDER BY DateOfMessage",
+                    (int(user.id), date1, date2)
+                )
+
+                message = log_to_message(data)
+
+                await ctx.send(message)
+            except ValueError:
+                await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+
 
     @messages.command()
     async def contains(self, ctx, keyword: str, amount: int = 10):
         if amount <= lookback_maxamount:
-            add_fetch(ctx, "Message")
             data = conn.execute(
                 "SELECT * FROM messages WHERE Content LIKE ? LIMIT ?",
                 ('%{}%'.format(str(keyword)), int(amount))
@@ -58,24 +75,69 @@ class UserCommands(commands.Cog):
             await ctx.send(message)
 
 
+    @messages.command()
+    async def containsfrom(self, ctx, keyword: str, user: discord.Member, amount: int = 10):
+        if amount <= lookback_maxamount:
+            data = conn.execute(
+                "SELECT * FROM messages WHERE Content LIKE ? AND AuthorID = ? LIMIT ?",
+                ('%{}%'.format(str(keyword)), int(user.id), int(amount))
+            )
+
+            message = log_to_message(data)
+
+            await ctx.send(message)
+
+
+    # NOT WORKING
+    @messages.command()
+    async def containsbetween(self, ctx, keyword: str, raw_date1: str, raw_date2: str, amount: int = 10):
+        if amount <= lookback_maxamount:
+            try:
+                date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
+                date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
+                data = conn.execute(
+                    "SELECT * FROM messages WHERE Content LIKE ? AND DateOfMessage BETWEEN ? AND ? ORDER BY DateOfMessage",
+                    ('%{}%'.format(str(keyword)), date1, date2)
+                )
+
+                message = log_to_message(data)
+
+                await ctx.send(message)
+            except ValueError:
+                await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+
+
+    @messages.command()
+    async def containsfrombetween(self, ctx, keyword: str, user: discord.Member, raw_date1: str, raw_date2: str, amount: int = 10):
+        if amount <= lookback_maxamount:
+            try:
+                date1 = dt.strptime(raw_date1, "%y/%m/%d %H:%M:%S")
+                date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
+                data = conn.execute(
+                    "SELECT * FROM messages WHERE AuthorID = ? AND Content LIKE ? AND DateOfMessage BETWEEN ? AND ? ORDER BY DateOfMessage",
+                    (int(user.id), '%{}%'.format(keyword), date1, date2)
+                )
+
+                message = log_to_message(data)
+
+                await ctx.send(message)
+            except ValueError:
+                await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+
+
 def log_to_message(data):
     message = ""
     i = 1
     for row in data.fetchall():
-        placeholder = "{}\n`{}.{}[{}]: {}`".format(message, i, row[1], row[2][:-7], row[3])
+        placeholder = "{}`{}.{}({})[{}]: {}`\n".format(message, i, row[1], str(row[2]), row[3][:-7], row[4])
         if len(placeholder) <= 2000:
             message = placeholder
             i += 1
-    return message
 
-
-def add_fetch(ctx, type):
-    conn.execute(
-        "INSERT INTO logfetches(FetchDate, Author, FetchType) VALUES(?, ?, ?)",
-        (ctx.message.created_at, str(ctx.author), str(type))
-    )
-
-    conn.commit()
+    if len(message) == 0:
+        return "No records found."
+    else:
+        return message
 
 
 def setup(bot):
