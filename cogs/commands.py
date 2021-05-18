@@ -3,6 +3,8 @@ from discord.ext import commands
 from datetime import datetime as dt
 from bot import conn
 
+
+# The maximum amount of LIMIT parameter
 lookback_maxamount = 100
 
 class UserCommands(commands.Cog):
@@ -14,6 +16,7 @@ class UserCommands(commands.Cog):
         print("Commands cog ready")
 
 
+    # Prints last {amount} of messages from a specified user
     @commands.group(invoke_without_command=True, aliases=['message'])
     async def messages(self, ctx, user: discord.Member, amount:int = 10):
         if amount <= lookback_maxamount:
@@ -26,6 +29,7 @@ class UserCommands(commands.Cog):
             await ctx.send(message)
 
     
+    # Prints last {amount} of messages between the two given dates
     @messages.command()
     async def between(self, ctx, raw_date1: str, raw_date2: str, amount:int = 10):
         if amount <= lookback_maxamount:
@@ -44,6 +48,7 @@ class UserCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
             
 
+    # Prints last {amount} of messages between the given dates from a specified user
     @messages.command()
     async def betweenfrom(self, ctx, raw_date1: str, raw_date2: str, user: discord.Member, amount:int = 10):
         if amount <= lookback_maxamount:
@@ -62,6 +67,7 @@ class UserCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
+    # Prints last {amount} of messages which contains the given keyword
     @messages.command()
     async def contains(self, ctx, keyword: str, amount: int = 10):
         if amount <= lookback_maxamount:
@@ -75,6 +81,7 @@ class UserCommands(commands.Cog):
             await ctx.send(message)
 
 
+    # Prints last {amount} of messages which contains the given keyword sent by a specified user
     @messages.command()
     async def containsfrom(self, ctx, keyword: str, user: discord.Member, amount: int = 10):
         if amount <= lookback_maxamount:
@@ -89,6 +96,7 @@ class UserCommands(commands.Cog):
 
 
     # NOT WORKING
+    # Prints last {amount} of messages which contains the given keyword between the two given dates
     @messages.command()
     async def containsbetween(self, ctx, keyword: str, raw_date1: str, raw_date2: str, amount: int = 10):
         if amount <= lookback_maxamount:
@@ -107,6 +115,7 @@ class UserCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
+    # Prints last {amount} of messages which contains the given keyword sent by a specified user between the two given dates
     @messages.command()
     async def containsfrombetween(self, ctx, keyword: str, user: discord.Member, raw_date1: str, raw_date2: str, amount: int = 10):
         if amount <= lookback_maxamount:
@@ -125,6 +134,26 @@ class UserCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
+    # Changes the maximum amount of messages that can be looked back at the same time
+    @commands.command()
+    async def lookbacklimit(self, ctx, limit: int):
+        if limit > 1:
+            message = "Update:\n"
+            pastLimit = lookback_maxamount
+            lookback_maxamount = limit
+            if pastLimit < lookback_maxamount:
+                message += "Lookback limit increased from {} to {}".format(pastLimit, lookback_maxamount)
+            elif pastLimit > lookback_maxamount:
+                message += "Lookback limit decreased from {} to {}".format(pastLimit, lookback_maxamount)
+            else:
+                message += "Attention: New limit equals to old limit."
+
+            await ctx.send(message)
+
+
+# Functions
+
+# Convers the "message" table data into a sendable text
 def log_to_message(data):
     message = ""
     i = 1

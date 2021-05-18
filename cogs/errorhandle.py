@@ -3,14 +3,17 @@ from discord.ext import commands
 
 class ErrorHandler(commands.Cog):
     
+    # Add bot to the cog
     def __init__(self, bot):
         self.bot = bot
+
 
     @commands.Cog.listener()
     async def on_ready(self):
         print("Error handler cog ready")
 
-    
+
+    # RUNS ON EVERY ERROR
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.MemberNotFound):
