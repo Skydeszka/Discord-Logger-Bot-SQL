@@ -8,9 +8,6 @@
 
 # Required modules
 All can be found in requirements.txt
-    -discord.py
-    -sqlite
-    -datetime
 
 # Bot commands
     Bot prefix: "!log."
