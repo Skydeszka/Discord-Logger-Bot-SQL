@@ -53,6 +53,17 @@ async def on_message_edit(before, after):
     await bot.process_commands(after)
 
 
+# Saves database, can be done by Administrator permission
+@bot.command()
+@commands.has_permissions(administrator = True)
+async def commit(ctx):
+    await ctx.send("Committing database...")
+
+    conn.commit()
+
+    await ctx.send("Commit complete")
+
+
 # Functions
 def build_database():
     with open(file="./scripts/start.sql", mode="r", encoding="utf-8") as f:
