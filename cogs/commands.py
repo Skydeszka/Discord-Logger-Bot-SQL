@@ -152,12 +152,28 @@ class UserCommands(commands.Cog):
 
 # Functions
 
-# Convers the "message" table data into a sendable text
+# Convers the "messages" table data into a sendable text
 def log_to_message(data):
     message = ""
     i = 1
     for row in data.fetchall():
         placeholder = "{}`{}.{}({})[{}]: {}`\n".format(message, i, row[1], str(row[2]), row[3][:-7], row[4])
+        if len(placeholder) <= 2000:
+            message = placeholder
+            i += 1
+
+    if len(message) == 0:
+        return "No records found."
+    else:
+        return message
+
+
+# Convers the "edits" table data into a sendable text
+def log_to_edit(data):
+    message = ""
+    i = 1
+    for row in data.fetchall():
+        placeholder = "{}```{}.{}({})[{} - {}]\nOrginal: {}\nEdit: {}```\n".format(message, i, row[1], str(row[2]), row[3][:-7], row[4][:-7], row[4], row[5])
         if len(placeholder) <= 2000:
             message = placeholder
             i += 1
