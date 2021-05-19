@@ -1,0 +1,5 @@
+To make bot run:
+
+1. Create token.secret file
+2. Copy bot token into file
+3. Run bot
