@@ -1,17 +1,19 @@
 CREATE TABLE messages(
-    MessageID INTEGER PRIMARY KEY,
+    MessageID INTEGER NOT NULL,
     Author TEXT,
     AuthorID INTEGER,
-    DateOfMessage DATE PRIMARY KEY,
-    Content TEXT
+    DateOfMessage DATE NOT NULL,
+    Content TEXT,
+    PRIMARY KEY (MessageID, DateOfMessage)
 );
 
 CREATE TABLE edits(
-    MessageID INTEGER PRIMARY KEY,
+    MessageID INTEGER NOT NULL,
     Author TEXT,
     AuthorID INTEGER,
     DateOfOriginal DATE,
-    DateOfEdit DATE PRIMARY KEY,
+    DateOfEdit DATE NOT NULL,
     OriginalContent TEXT,
-    EditedContent TEXT
+    EditedContent TEXT,
+    PRIMARY KEY (MessageID, DateOfEdit)
 );
