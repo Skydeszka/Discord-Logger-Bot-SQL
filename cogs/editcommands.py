@@ -72,7 +72,7 @@ class MessageCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
-    # Prints last {amount} of messages which contains the given keyword
+    # Prints last {amount} of edits which contains the given keyword
     @edits.command()
     @commands.guild_only()
     @commands.has_permissions(manage_messages = True)
@@ -88,7 +88,7 @@ class MessageCommands(commands.Cog):
             await ctx.send(message)
 
 
-    # Prints last {amount} of messages which contains the given keyword sent by a specified user
+    # Prints last {amount} of edits which contains the given keyword sent by a specified user
     @edits.command()
     @commands.guild_only()
     @commands.has_permissions(manage_messages = True)
@@ -104,7 +104,7 @@ class MessageCommands(commands.Cog):
             await ctx.send(message)
 
 
-    # Prints last {amount} of messages which contains the given keyword between the two given dates
+    # Prints last {amount} of edits which contains the given keyword between the two given dates
     @edits.command()
     @commands.guild_only()
     @commands.has_permissions(manage_messages = True)
@@ -125,7 +125,7 @@ class MessageCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
-    # Prints last {amount} of messages which contains the given keyword sent by a specified user between the two given dates
+    # Prints last {amount} of edits which contains the given keyword sent by a specified user between the two given dates
     @edits.command()
     @commands.guild_only()
     @commands.has_permissions(manage_messages = True)
