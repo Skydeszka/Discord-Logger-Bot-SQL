@@ -4,6 +4,7 @@ CREATE TABLE messages(
     AuthorID INTEGER,
     DateOfMessage DATE NOT NULL,
     Content TEXT,
+    ChannelID INTEGER,
     PRIMARY KEY (MessageID, DateOfMessage)
 );
 
@@ -15,5 +16,6 @@ CREATE TABLE edits(
     DateOfEdit DATE NOT NULL,
     OriginalContent TEXT,
     EditedContent TEXT,
+    ChannelID INTEGER,
     PRIMARY KEY (MessageID, DateOfEdit)
 );
