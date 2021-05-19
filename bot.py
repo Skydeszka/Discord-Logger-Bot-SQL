@@ -74,8 +74,15 @@ def build_database():
 
 def add_message(msg: discord.Message):
     conn.execute(
-        "INSERT INTO messages VALUES(?, ?, ?, ?, ?)",
-        (int(msg.id), str(msg.author), int(msg.author.id), date_utc_to_local(msg.created_at), str(msg.content.replace("`", "")))
+        "INSERT INTO messages VALUES(?, ?, ?, ?, ?, ?)",
+        (
+            int(msg.id),
+            str(msg.author),
+            int(msg.author.id),
+            date_utc_to_local(msg.created_at),
+            str(msg.content.replace("`", "")),
+            int(msg.channel.id)
+        )
     )
 
     conn.commit()
@@ -83,10 +90,15 @@ def add_message(msg: discord.Message):
 
 def add_edit(bef: discord.Message, aft: discord.Message):
     conn.execute(
-        "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?, ?)",
-        (int(aft.id), str(aft.author), int(aft.author.id),
-        date_utc_to_local(bef.created_at), date_utc_to_local(aft.edited_at),
-        str(bef.content.replace("`", "")), str(aft.content.replace("`", "")))
+        "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?, ?, ?)",
+        (
+            int(aft.id),
+            str(aft.author),
+            int(aft.author.id),
+            date_utc_to_local(bef.created_at), date_utc_to_local(aft.edited_at),
+            str(bef.content.replace("`", "")), str(aft.content.replace("`", "")),
+            int(aft.channel.id)
+        )
     )
 
     conn.commit()
