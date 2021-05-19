@@ -27,6 +27,8 @@ class MessageCommands(commands.Cog):
             message = log_to_edit(data)
 
             await ctx.send(message)
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits between the two given dates
@@ -48,6 +50,8 @@ class MessageCommands(commands.Cog):
                 await ctx.send(message)
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits between the given dates from a specified user
@@ -69,6 +73,8 @@ class MessageCommands(commands.Cog):
                 await ctx.send(message)
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits which contains the given keyword
@@ -85,6 +91,8 @@ class MessageCommands(commands.Cog):
             message = log_to_edit(data)
 
             await ctx.send(message)
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits which contains the given keyword sent by a specified user
@@ -101,6 +109,8 @@ class MessageCommands(commands.Cog):
             message = log_to_edit(data)
 
             await ctx.send(message)
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits which contains the given keyword between the two given dates
@@ -122,6 +132,8 @@ class MessageCommands(commands.Cog):
                 await ctx.send(message)
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
     # Prints last {amount} of edits which contains the given keyword sent by a specified user between the two given dates
@@ -143,6 +155,8 @@ class MessageCommands(commands.Cog):
                 await ctx.send(message)
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
+        else:
+            await ctx.send("Error:\nMaximum lookback amount ({}) exceeded".format(lookback_maxamount))
 
 
 def setup(bot):
