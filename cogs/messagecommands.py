@@ -2,18 +2,17 @@ import discord
 from discord.ext import commands
 from datetime import datetime as dt
 from bot import conn
+from cogs.functions import lookback_maxamount, log_to_message
 
 
-# The maximum amount of LIMIT parameter
-lookback_maxamount = 100
 
-class UserCommands(commands.Cog):
+class MessageCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Commands cog ready")
+        print("Message Commands cog ready")
 
 
     # Prints last {amount} of messages from a specified user
@@ -147,70 +146,8 @@ class UserCommands(commands.Cog):
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
 
 
-    # Changes the maximum amount of messages that can be looked back at the same time
-    @commands.command()
-    async def lookbacklimit(self, ctx, limit: int):
-        if limit > 1:
-            message = "Update:\n"
-            pastLimit = lookback_maxamount
-            lookback_maxamount = limit
-            if pastLimit < lookback_maxamount:
-                message += "Lookback limit increased from {} to {}".format(pastLimit, lookback_maxamount)
-            elif pastLimit > lookback_maxamount:
-                message += "Lookback limit decreased from {} to {}".format(pastLimit, lookback_maxamount)
-            else:
-                message += "Attention: New limit equals to old limit."
-
-            await ctx.send(message)
-
-    # Prints last {amount} of edits from a specified user
-    @commands.group(invoke_without_command=True, aliases=["edit"])
-    @commands.guild_only()
-    @commands.has_permissions(manage_messages = True)
-    async def edits(self, ctx, user: discord.Member, amount:int = 10):
-        if amount <= lookback_maxamount:
-            data = conn.execute(
-                "SELECT * FROM edits WHERE AuthorID = ? LIMIT ?", (int(user.id), amount) 
-            )
-
-            message = log_to_edit(data)
-
-            await ctx.send(message)
-
-
 # Functions
-
-# Convers the "messages" table data into a sendable text
-def log_to_message(data):
-    message = ""
-    i = 1
-    for row in data.fetchall():
-        placeholder = "{}`{}.{}({})[{}]: {}`\n".format(message, i, row[1], str(row[2]), row[3][:-7], row[4])
-        if len(placeholder) <= 2000:
-            message = placeholder
-            i += 1
-
-    if len(message) == 0:
-        return "No records found."
-    else:
-        return message
-
-
-# Convers the "edits" table data into a sendable text
-def log_to_edit(data):
-    message = ""
-    i = 1
-    for row in data.fetchall():
-        placeholder = "{}```{}.{}({})[{} - {}]\nOrginal: {}\nEdit: {}```\n".format(message, i, row[1], str(row[2]), row[3][:-7], row[4][:-7], row[4], row[5])
-        if len(placeholder) <= 2000:
-            message = placeholder
-            i += 1
-
-    if len(message) == 0:
-        return "No records found."
-    else:
-        return message
 
 
 def setup(bot):
-    bot.add_cog(UserCommands(bot))
+    bot.add_cog(MessageCommands(bot))
