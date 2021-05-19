@@ -5,14 +5,13 @@ from bot import conn
 from cogs.functions import lookback_maxamount, log_to_message
 
 
-
 class MessageCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Message Commands cog ready")
+        print("Message commands script ready")
 
 
     # Prints last {amount} of messages from a specified user
@@ -144,9 +143,6 @@ class MessageCommands(commands.Cog):
                 await ctx.send(message)
             except ValueError:
                 await ctx.send("Invalid date type.\nCorrect type: YY/MM/DD HH:MM:SS")
-
-
-# Functions
 
 
 def setup(bot):

@@ -1,13 +1,21 @@
-import discord
 from discord.ext import commands
 
 # The maximum amount of LIMIT parameter
 lookback_maxamount = 100
 
+
 class Functions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Functions script ready")
+
+
+    # Only administrators can use
+    # Changes the maximum limit of messages that can be looked back with a message
     @commands.command()
     @commands.has_permissions(administrator = True)
     async def limit(self, ctx, limit:int):
@@ -45,8 +53,9 @@ def log_to_edit(data):
     else:
         return message
 
-    
-def lookback_limit(limit: int, ctx: commands.Context):
+
+# Changes the lookback limit
+def lookback_limit(limit: int):
     limit = 1 if limit <= 1 else limit
 
     msg = "Update:\n"
