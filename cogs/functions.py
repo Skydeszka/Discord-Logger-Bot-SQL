@@ -1,7 +1,10 @@
 from discord.ext import commands
+from bot import conn, setting_preset
 
 # The maximum amount of LIMIT parameter
-lookback_maxamount = 100
+__lookback_maxamount:int = conn.execute(
+                "SELECT LookbackMax FROM setting WHERE PresetID = ?", (setting_preset,) 
+            ).fetchone()[0]
 
 
 class Functions(commands.Cog):
@@ -11,6 +14,8 @@ class Functions(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        global lookback_maxamount
+        lookback_maxamount = 100
         print("Functions script ready")
 
 
@@ -18,8 +23,11 @@ class Functions(commands.Cog):
     # Changes the maximum limit of messages that can be looked back with a message
     @commands.command()
     @commands.has_permissions(administrator = True)
-    async def limit(self, ctx, limit:int):
-        await ctx.send(lookback_limit(limit, ctx))
+    async def limit(self, ctx, limit: str):
+        if limit.isnumeric():
+            await ctx.send(_lookback_limit(int(limit)))
+        else:
+            await ctx.send("Error:\nGiven value not a number\n||{}||".format(ctx.author.mention))
 
 
 # Convers the "messages" table data into a sendable text
@@ -55,20 +63,32 @@ def log_to_edit(data):
 
 
 # Changes the lookback limit
-def lookback_limit(limit: int):
+def _lookback_limit(limit: int):
     limit = 1 if limit <= 1 else limit
 
+    global __lookback_maxamount
+
     msg = "Update:\n"
-    if limit > lookback_maxamount:
-        msg += "Maximum lookback amount increased from {} to {}.".format(lookback_maxamount, limit)
-    elif limit < lookback_maxamount:
-        msg += "Maximum lookback amount decreased from {} to {}.".format(lookback_maxamount, limit)
+    if limit > __lookback_maxamount:
+        msg += "Maximum lookback amount increased from {} to {}.".format(__lookback_maxamount, limit)
+    elif limit < __lookback_maxamount:
+        msg += "Maximum lookback amount decreased from {} to {}.".format(__lookback_maxamount, limit)
     else:
         msg += "Given amount and loopback amount are the same. No changes done."
 
-    lookback_maxamount = limit
-    
+    __lookback_maxamount = limit
+
+    conn.execute(
+        "UPDATE setting SET LookbackMax = ? WHERE PresetID = ?", (int(limit), int(setting_preset))
+    )
+
+    conn.commit()
+
     return msg
+
+
+def lookback():
+    return __lookback_maxamount
 
 
 def setup(bot):
