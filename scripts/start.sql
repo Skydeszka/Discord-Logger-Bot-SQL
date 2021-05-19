@@ -27,3 +27,6 @@ CREATE TABLE setting (
 );
 
 INSERT INTO setting(LookbackMax) VALUES (100);
+INSERT INTO setting(LookbackMax) VALUES (1000);
+INSERT INTO setting(LookbackMax) VALUES (10);
+INSERT INTO setting(LookbackMax) VALUES (100);

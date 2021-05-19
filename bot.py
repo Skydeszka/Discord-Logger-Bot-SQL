@@ -33,7 +33,13 @@ conn = sqlite3.connect("./database/logs.db3")
 
 # Settings preset ID
 # Change source to change preset
-setting_preset = 1
+# Base presets:
+#   1 - normal  - 100   lookback
+#   2 - extreme - 1000  lookback
+#   3 - low     - 10    lookback
+#   4 - custom  - can be changed with !log.limit <limit> command
+#!!CHANGING THE VALUE BESIDE THESE WILL CAUSE AN EXCEPTION!!
+setting_preset = 4
 
 
 # Executes function when bot is ready

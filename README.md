@@ -12,5 +12,8 @@ All can be found in requirements.txt
     Bot prefix: "!log."
 
     All other commands can be viewed by typing: "!log.help"
+
+# Errors
+    Any error may be reported to: skydeszka.bots@gmail.com
     
 

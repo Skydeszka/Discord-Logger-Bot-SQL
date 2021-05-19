@@ -79,7 +79,7 @@ def _lookback_limit(limit: int):
     __lookback_maxamount = limit
 
     conn.execute(
-        "UPDATE setting SET LookbackMax = ? WHERE PresetID = ?", (int(limit), int(setting_preset))
+        "UPDATE setting SET LookbackMax = ? WHERE PresetID = 4", (int(limit),)
     )
 
     conn.commit()
