@@ -31,6 +31,11 @@ bot = commands.Bot(command_prefix="!log.")
 conn = sqlite3.connect("./database/logs.db3")
 
 
+# Settings preset ID
+# Change source to change preset
+setting_preset = 1
+
+
 # Executes function when bot is ready
 @bot.event
 async def on_ready():
