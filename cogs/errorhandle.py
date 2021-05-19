@@ -1,4 +1,6 @@
 from discord.ext import commands
+from discord import Member
+
 
 class ErrorHandler(commands.Cog):
     
@@ -18,12 +20,12 @@ class ErrorHandler(commands.Cog):
 
         # Runs if a non existing member is used
         if isinstance(error, commands.errors.MemberNotFound):
-            await ctx.send("Error:\nMember does not exist.\n||{}||".format(ctx.author.mention))
+            await ctx.send(error_message("Member does not exist", ctx.author))
 
         # Runs if a command has a missing required argument
         elif isinstance(error, commands.errors.MissingRequiredArgument):
-            await ctx.send("Error:\nRequired argument missing.\n||{}||".format(ctx.author.mention))
-
+            await ctx.send(error_message("Required argument missing", ctx.author))
+ 
         # Runs if an exception hasn't been handled
         else:
             await ctx.send(
@@ -31,6 +33,10 @@ class ErrorHandler(commands.Cog):
                 "{}\n"
                 "||{}||".format(error, ctx.author.mention)
                 )
+
+
+def error_message(message:str, author: Member):
+    return "Error:\n{}.\n||{}||".format(message, author.mention)
 
 
 def setup(bot):
