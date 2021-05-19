@@ -2,7 +2,7 @@
  
 # Installation
     1. Download source from the repository
-    2. Create "token.secret" file in databse folder and insert your Discord bot's token.
+    2. Create "token.secret" file in databse directory and insert your Discord bot's token.
     3. Run bot.py
 
 # Required modules
