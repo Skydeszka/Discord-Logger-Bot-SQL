@@ -1,6 +1,7 @@
 # self added
 *.db3
 *.secret
+*.lnk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logs</title>
     <style>
-        .header{
+        *{
+            align-content: center;
             text-align: center;
+            margin: 5px;
         }
     </style>
 </head>
@@ -16,20 +18,27 @@
     <br>
     <script>
         function log(){
-            var input = document.getElementById("authorName").value;
-            var chckbox = document.getElementById("useID");
+            var author = document.getElementById("authorName").value;
+            var date1 = document.getElementById("date1").value;
+            var date2 = document.getElementById("date2").value;
+            var contains = document.getElementById("contains").value;
 
-            if(chckbox.checked){
-                input = "id: " + input;
-            }else{
-                input = "name: " + input;
-            }
-            
-            console.log(input);
+            console.log(author + " " + date1 + " " + date2 + " " + contains)
         }
     </script>
     <input type="text", id="authorName", placeholder="Message Author">
     <input type="checkbox", id="useID">
+    <br>
+
+    <input type="datetime-local", id="date1">
+    <input type="datetime-local", id="date2">
+
+    <br>
+
+    <input type="text", id="contains", placeholder="Contains">
+
+    <br>
     <input type="button", id="find", onclick="log()", value="Search">
+    <input type="button", id="find", onclick="ping()", value="ping">
 </body>
 </html>
