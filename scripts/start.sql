@@ -1,7 +1,7 @@
 CREATE TABLE messages(
-    MessageID       INTEGER NOT NULL,
+    MessageID       TEXT NOT NULL,
     Author          TEXT,
-    AuthorID        INTEGER,
+    AuthorID        TEXT,
     DateOfMessage   DATE NOT NULL,
     Content         TEXT,
     ChannelID       INTEGER,
@@ -9,9 +9,9 @@ CREATE TABLE messages(
 );
 
 CREATE TABLE edits(
-    MessageID       INTEGER NOT NULL,
+    MessageID       TEXT NOT NULL,
     Author          TEXT,
-    AuthorID        INTEGER,
+    AuthorID        TEXT,
     DateOfOriginal  DATE,
     DateOfEdit      DATE NOT NULL,
     OriginalContent TEXT,

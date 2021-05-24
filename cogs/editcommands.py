@@ -21,7 +21,7 @@ class MessageCommands(commands.Cog):
     async def edits(self, ctx, user: discord.Member, amount:int = 10):
         if amount <= lookback():
             data = conn.execute(
-                "SELECT * FROM edits WHERE AuthorID = ? LIMIT ?", (int(user.id), amount) 
+                "SELECT * FROM edits WHERE AuthorID = ? LIMIT ?", (str(user.id), amount) 
             )
 
             message = log_to_edit(data)
@@ -65,7 +65,7 @@ class MessageCommands(commands.Cog):
                 date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
                 data = conn.execute(
                     "SELECT * FROM edits WHERE AuthorID = ? AND DateOfEdit BETWEEN ? AND ? ORDER BY DateOfEdit",
-                    (int(user.id), date1, date2)
+                    (str(user.id), date1, date2)
                 )
 
                 message = log_to_edit(data)
@@ -103,7 +103,7 @@ class MessageCommands(commands.Cog):
         if amount <= lookback():
             data = conn.execute(
                 "SELECT * FROM edits WHERE Content LIKE ? AND AuthorID = ? LIMIT ?",
-                ('%{}%'.format(str(keyword)), int(user.id), int(amount))
+                ('%{}%'.format(str(keyword)), str(user.id), int(amount))
             )
 
             message = log_to_edit(data)
@@ -147,7 +147,7 @@ class MessageCommands(commands.Cog):
                 date2 = dt.strptime(raw_date2, "%y/%m/%d %H:%M:%S")
                 data = conn.execute(
                     "SELECT * FROM edits WHERE AuthorID = ? AND Content LIKE ? AND DateOfEdit BETWEEN ? AND ? ORDER BY DateOfEdit LIMIT ?",
-                    (int(user.id), '%{}%'.format(str(keyword)), date1, date2, int(amount))
+                    (str(user.id), '%{}%'.format(str(keyword)), date1, date2, int(amount))
                 )
 
                 message = log_to_edit(data)
