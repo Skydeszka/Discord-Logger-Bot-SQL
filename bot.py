@@ -92,7 +92,7 @@ def add_message(msg: discord.Message):
             str(msg.author.id),
             date_utc_to_local(msg.created_at),
             str(msg.content.replace("`", "")),
-            int(msg.channel.id)
+            str(msg.channel.id)
         )
     )
 
@@ -108,7 +108,7 @@ def add_edit(bef: discord.Message, aft: discord.Message):
             str(aft.author.id),
             date_utc_to_local(bef.created_at), date_utc_to_local(aft.edited_at),
             str(bef.content.replace("`", "")), str(aft.content.replace("`", "")),
-            int(aft.channel.id)
+            str(aft.channel.id)
         )
     )
 
