@@ -3,15 +3,18 @@ const express = require("express");
 const app = express();
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./database/logs.db3', sqlite3.OPEN_READONLY, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to database.');
-  });
-
 
 const port = process.env.PORT || 3000;
+
+
+function open_db(){
+    return new sqlite3.Database('./database/logs.db3', sqlite3.OPEN_READONLY, (err) => {
+        if (err) {
+          console.error(err.message);
+        }
+        console.log('Connected to database.');
+      });
+}
 
 
 app.get('/', (req, res) =>{
@@ -19,6 +22,7 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/api/logs', (req, res) =>{
+    const db = open_db();
 
     const orderBy = req.query.orderBy;
     let selectBy = req.query.selectBy;
@@ -52,6 +56,8 @@ app.get('/api/logs', (req, res) =>{
         else
             res.send(JSON.stringify(rawdata));
     });
+
+    db.close();
 });
 
 app.listen(port, () =>{
