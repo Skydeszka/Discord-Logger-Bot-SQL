@@ -19,7 +19,7 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/api/logs', (req, res) =>{
-    var selector = "SELECT * FROM messages";
+    const selector = "SELECT * FROM messages";
 
     db.all(selector, [], (err, rows) =>{
         if(err) throw err;
@@ -28,11 +28,15 @@ app.get('/api/logs', (req, res) =>{
 });
 
 app.get('/api/logs/:msgid', (req, res) =>{
-    var selector = "SELECT * FROM messages WHERE MessageID = ?";
+    const selector = "SELECT * FROM messages WHERE MessageID = ?";
 
     db.all(selector, [req.params.msgid], (err, rows) =>{
         if(err) throw err;
-        res.send(JSON.stringify(rows));
+
+        if(rows.length == 0)
+            res.status(404).send("No logs were found with this message ID.");
+        else
+            res.send(JSON.stringify(rows));
     });
 });
 
