@@ -21,9 +21,19 @@ app.get('/', (req, res) =>{
 app.get('/api/logs', (req, res) =>{
     const selector = "SELECT * FROM messages";
 
+    const sortBy = req.query.sortBy;
+
     db.all(selector, [], (err, rows) =>{
         if(err) throw err;
-        res.send(JSON.stringify(rows));
+        res.send(
+            JSON.stringify(
+                rows.sort(
+                    (a, b) => {
+                        return new Date(b.DateOfMessage) - new Date(a.DateOfMessage); // descending
+                      }
+                )
+            )
+        );
     });
 });
 
