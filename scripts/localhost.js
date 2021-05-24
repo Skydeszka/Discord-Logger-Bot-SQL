@@ -1,11 +1,10 @@
-// Module import
-const express = require("express");
-const app = express();
+var http = require('http');
+var fs = require('fs');
 
-app.get('/', (req, res) =>{
-    res.send("Hello world!");
-});
-
-app.listen(3000, () =>{
-    console.log("Listen on port 3000");
-});
+http.createServer(function(req, res){
+    fs.readFile('./webpage/index.html',function (err, data){
+        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+        res.write(data);
+        res.end();
+    });
+}).listen(8080);
