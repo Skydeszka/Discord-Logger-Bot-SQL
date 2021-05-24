@@ -19,34 +19,12 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/api/logs', (req, res) =>{
-    const selector = "SELECT * FROM messages";
-
     const sortBy = req.query.sortBy;
 
-    db.all(selector, [], (err, rows) =>{
-        if(err) throw err;
-        res.send(
-            JSON.stringify(
-                rows.sort(
-                    (a, b) => {
-                        return new Date(b.DateOfMessage) - new Date(a.DateOfMessage); // descending
-                      }
-                )
-            )
-        );
-    });
-});
-
-app.get('/api/logs/:msgid', (req, res) =>{
-    const selector = "SELECT * FROM messages WHERE MessageID = ?";
-
-    db.all(selector, [req.params.msgid], (err, rows) =>{
+    db.all("SELECT * FROM messages", [], (err, rows) => {
         if(err) throw err;
 
-        if(rows.length == 0)
-            res.status(404).send("No logs were found with this message ID.");
-        else
-            res.send(JSON.stringify(rows));
+        res.send(JSON.stringify(rows.find()))
     });
 });
 
