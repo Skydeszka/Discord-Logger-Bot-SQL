@@ -21,7 +21,7 @@ function open_db(){
         if (err) {
           console.error(err.message);
         }
-        console.log('Connected to database.');
+        console.log('Connected to database');
       });
 }
 
