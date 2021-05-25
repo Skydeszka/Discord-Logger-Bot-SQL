@@ -29,3 +29,8 @@ html(lang="en")
             input(type="button", id="find", onclick="log()", value="Search")
 
             p Logs found: 0
+
+            - var error = false
+
+            if error
+                p Error: #{err}
