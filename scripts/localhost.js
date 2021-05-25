@@ -70,11 +70,14 @@ app.get('/api/logs', (req, res) =>{
             else
                 rows = rows.filter(row => row.Author.slice(0, -5) === author);
         }
-        if((since != null || since) && (before == null || !before)){
+        if((since != null && !isNaN(since) && (before == null || isNaN(before)))){
+            console.log("Since passed")
             rows = rows.filter(row => new Date(row.DateOfMessage) > since);
-        } else if((since == null || !since) && (before != null || before)){
+        } else if((since == null || isNaN(since) && (before != null && !isNaN(before)))){
+            console.log("Before passed")
             rows = rows.filter(row => new Date(row.DateOfMessage) < before);
-        }else if(before != null && since != null){
+        }else if((since != null && !isNaN(since) && (before != null && !isNaN(before)))){
+            console.log("Between passed")
             rows = rows.filter(row =>(
                 new Date(row.DateOfMessage) > since
                 &&
