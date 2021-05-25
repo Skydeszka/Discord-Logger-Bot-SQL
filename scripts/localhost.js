@@ -58,8 +58,6 @@ app.get('/api/logs', (req, res) =>{
 
     const contains = req.query.contains;
 
-    console.log(since +" " + before);
-
     db.all("SELECT * FROM messages", [], (err, rows) => {
         if(err) throw err;
 
@@ -84,6 +82,8 @@ app.get('/api/logs', (req, res) =>{
                 new Date(row.DateOfMessage) < before)
                 );
         }
+        if(contains != null)
+            rows = rows.filter(row => row.Content.includes(contains));
 
         if(rows.length != 0){
             res.json(rows);
