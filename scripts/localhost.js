@@ -30,12 +30,6 @@ app.get('/', (req, res) =>{
 
     let dest_url = `http://localhost:${port}/api/logs`;
 
-    const selectBy = req.query.selectBy;
-
-    if(selectBy) dest_url += "?selectBy=" + selectBy;
-
-    console.log(dest_url)
-
     fetch(dest_url).then(res => {
         return res.json();
     })
@@ -45,44 +39,55 @@ app.get('/', (req, res) =>{
         })
     })
     .catch(err => {
-        res.render('nolog');
+        res.render('nolog', {
+            error: true,
+            err: err
+        });
     })
 });
 
 app.get('/api/logs', (req, res) =>{
     const db = open_db();
 
-    const orderBy = req.query.orderBy;
-    let selectBy = req.query.selectBy;
+    const author = req.query.author;
+    const authorid = req.query.authorid;
+    const useid = (req.query.useid === "true")
+
+    const since = Date.parse(req.query.since);
+    const before = Date.parse(req.query.before);
+
+    const contains = req.query.contains;
+
+    console.log(since +" " + before);
 
     db.all("SELECT * FROM messages", [], (err, rows) => {
         if(err) throw err;
 
-        let rawdata = {};
-
-        if(selectBy){
-            selectBy = selectBy.split(',');
-            if(selectBy[0].toLowerCase() == "name")
-                rawdata = rows.filter(x => x.Author.slice(0, -5) === selectBy[1]);
-            else if(selectBy[0].toLowerCase() == "id")
-                rawdata = rows.filter(x => x.AuthorID === selectBy[1]);
-            else if(selectBy[0].toLowerCase() == "since")
-                rawdata = rows.filter(x => new Date(x.DateOfMessage) >= new Date(selectBy[1]));
-            else if(selectBy[0].toLowerCase() == "between")
-                rawdata = rows.filter(x => {return new Date(x.DateOfMessage) >= new Date(selectBy[1]) && new Date(x.DateOfMessage) <= new Date(selectBy[2])});
-            else if(selectBy[0].toLowerCase() == "before")
-                rawdata = rows.filter(x => new Date(x.DateOfMessage) <= new Date(selectBy[1]));
-            else if(selectBy[0].toLowerCase() == "contains")
-                rawdata = rows.filter(x => x.Content.includes(selectBy[1]));
+        if((useid != null && authorid != null) || author != null){
+            console.log("Author passed");
+            if(useid)
+                rows = rows.filter(row => row.AuthorID === authorid);
+            else
+                rows = rows.filter(row => row.Author.slice(0, -5) === author);
         }
-        else
-            rawdata = rows;
+        if((since != null || since) && (before == null || !before)){
+            rows = rows.filter(row => new Date(row.DateOfMessage) > since);
+        } else if((since == null || !since) && (before != null || before)){
+            rows = rows.filter(row => new Date(row.DateOfMessage) < before);
+        }else if(before != null && since != null){
+            rows = rows.filter(row =>(
+                new Date(row.DateOfMessage) > since
+                &&
+                new Date(row.DateOfMessage) < before)
+                );
+        }
 
-
-        if(rawdata.length == 0)
-            res.status(404).send("No match found");
-        else
-            res.json(rawdata);
+        if(rows.length != 0){
+            res.json(rows);
+        }
+        else{
+            res.status(404).send("Error 404");
+        }
     });
 
     db.close();
