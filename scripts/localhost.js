@@ -28,15 +28,25 @@ function open_db(){
 
 app.get('/', (req, res) =>{
 
-    fetch(`http://localhost:${port}/api/logs`).then(res => {
+    let dest_url = `http://localhost:${port}/api/logs`;
+
+    const selectBy = req.query.selectBy;
+
+    if(selectBy) dest_url += "?selectBy=" + selectBy;
+
+    console.log(dest_url)
+
+    fetch(dest_url).then(res => {
         return res.json();
     })
     .then(json => {
-        console.log(json)
-        res.render('index', {
+        res.render('foundlog', {
             messages: json
         })
-    });
+    })
+    .catch(err => {
+        res.render('nolog');
+    })
 });
 
 app.get('/api/logs', (req, res) =>{

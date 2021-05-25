@@ -4,4 +4,12 @@ function log(){
     const date2 = document.getElementById("date2").value;
     const contains = document.getElementById("contains").value;
 
+    let params = new URLSearchParams(
+        new URL(window.location.href).search.slice(1)
+    );
+
+    if(author.length != 0) params = ("selectBy=" + `name,${author}`)
+    else params = "";
+
+    window.location.href = window.location.origin + "?" + params;
 }
