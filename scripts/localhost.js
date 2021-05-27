@@ -46,6 +46,56 @@ app.get('/', (req, res) =>{
     })
 });
 
+app.get('/api/logs', (req, res) =>{
+    const db = open_db();
+
+    const author = req.query.author;
+    const authorid = req.query.authorid;
+    const useid = (req.query.useid === "true")
+
+    const since = Date.parse(req.query.since);
+    const before = Date.parse(req.query.before);
+
+    const contains = req.query.contains;
+
+    db.all("SELECT * FROM messages", [], (err, rows) => {
+        if(err) throw err;
+
+        if((useid != null && authorid != null) || author != null){
+            console.log("Author passed");
+            if(useid)
+                rows = rows.filter(row => row.AuthorID === authorid);
+            else
+                rows = rows.filter(row => row.Author.slice(0, -5) === author);
+        }
+        if((since != null && !isNaN(since) && (before == null || isNaN(before)))){
+            console.log("Since passed")
+            rows = rows.filter(row => new Date(row.DateOfMessage) > since);
+        } else if((since == null || isNaN(since) && (before != null && !isNaN(before)))){
+            console.log("Before passed")
+            rows = rows.filter(row => new Date(row.DateOfMessage) < before);
+        }else if((since != null && !isNaN(since) && (before != null && !isNaN(before)))){
+            console.log("Between passed")
+            rows = rows.filter(row =>(
+                new Date(row.DateOfMessage) > since
+                &&
+                new Date(row.DateOfMessage) < before)
+                );
+        }
+        if(contains != null)
+            rows = rows.filter(row => row.Content.includes(contains));
+
+        if(rows.length != 0){
+            res.json(rows);
+        }
+        else{
+            res.status(404).send("Error 404");
+        }
+    });
+
+    db.close();
+});
+
 app.listen(port, () =>{
     console.log(`Listening on port ${port}...`);
 });
