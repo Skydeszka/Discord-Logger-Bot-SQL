@@ -88,7 +88,7 @@ def add_message(msg: discord.Message):
         "INSERT INTO messages VALUES(?, ?, ?, ?, ?, ?)",
         (
             str(msg.id),
-            str(msg.author),
+            str(msg.author.name),
             str(msg.author.id),
             date_utc_to_local(msg.created_at),
             str(msg.content.replace("`", "")),
@@ -104,7 +104,7 @@ def add_edit(bef: discord.Message, aft: discord.Message):
         "INSERT INTO edits VALUES(?, ? ,?, ?, ?, ?, ?, ?)",
         (
             str(aft.id),
-            str(aft.author),
+            str(aft.author.name),
             str(aft.author.id),
             date_utc_to_local(bef.created_at), date_utc_to_local(aft.edited_at),
             str(bef.content.replace("`", "")), str(aft.content.replace("`", "")),
