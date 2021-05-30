@@ -35,7 +35,7 @@ function _ReadMessages(author, useID, since, before, contains){
       let selector = "SELECT * FROM messages ";
 
       if(author != null){
-        if(useID == "true")
+        if(useID == true)
           selector += `WHERE AuthorID = "${author}" `;
         else
         selector += `WHERE Author = "${author}" `;
