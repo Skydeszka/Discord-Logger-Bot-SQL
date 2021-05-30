@@ -1,21 +1,17 @@
 function log(){
     const author = document.getElementById("authorName").value;
-    const useID = document.getElementById("useID").value;
+    const useID = document.getElementById("useID").checked;
     const date1 = document.getElementById("date1").value;
     const date2 = document.getElementById("date2").value;
     const contains = document.getElementById("contains").value;
 
-    let params = new URLSearchParams(
-        new URL(window.location.href).search.slice(1)
-    );
+    let params = new URLSearchParams();
 
-    params = "";
-
-    if(author.length != 0) params += `&author=${author}`;
-    if(useID.length != 0) params += `&author=${useID}`;
-    if(date1.length != 0) params += `&author=${date1}`;
-    if(date2.length != 0) params += `&author=${date2}`;
-    if(contains.length != 0) params += `&author=${contains}`;
+    if(author.length != 0) params.append("author", author);
+    if(useID.length != 0) params.append("useid", useID);
+    if(date1.length != 0) params.append("since", date1);
+    if(date2.length != 0) params.append("before", date2);
+    if(contains.length != 0) params.append("contains", contains);
 
     window.location.href = window.location.origin + "?" + params;
 }
