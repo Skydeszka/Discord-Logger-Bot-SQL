@@ -15,3 +15,12 @@ function log(){
 
     window.location.href = window.location.origin + "/logs" + "?" + params;
 }
+
+
+function reset(){
+    const author = document.getElementById("authorName").value = null;
+    const useID = document.getElementById("useID").checked = false;
+    const date1 = document.getElementById("date1").value = null;
+    const date2 = document.getElementById("date2").value = null;
+    const contains = document.getElementById("contains").value = null;
+}

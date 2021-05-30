@@ -33,6 +33,7 @@ html(lang="en")
                 br
 
             input(type="button", id="find", onclick="log()" value="Search")
+            input(type="button", id="reset", onclick="reset()", value="Reset")
 
         if messages.length > 0
             p Logs found: #{messages.length}
