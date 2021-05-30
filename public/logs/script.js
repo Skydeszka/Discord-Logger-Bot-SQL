@@ -1,4 +1,4 @@
-function log(){
+function search(){
     const author = document.getElementById("authorName").value;
     const useID = document.getElementById("useID").checked;
     const date1 = document.getElementById("date1").value;
@@ -23,4 +23,6 @@ function reset(){
     const date1 = document.getElementById("date1").value = null;
     const date2 = document.getElementById("date2").value = null;
     const contains = document.getElementById("contains").value = null;
+
+    window.location.href = window.location.origin + "/logs"
 }
