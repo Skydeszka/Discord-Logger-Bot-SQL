@@ -9,8 +9,13 @@ function log(){
         new URL(window.location.href).search.slice(1)
     );
 
-    if(author.length != 0) params = ("selectBy=" + `name,${author}`)
-    else params = "";
+    params = "";
+
+    if(author.length != 0) params += `&author=${author}`;
+    if(useID.length != 0) params += `&author=${useID}`;
+    if(date1.length != 0) params += `&author=${date1}`;
+    if(date2.length != 0) params += `&author=${date2}`;
+    if(contains.length != 0) params += `&author=${contains}`;
 
     window.location.href = window.location.origin + "?" + params;
 }
