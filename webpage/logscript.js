@@ -13,5 +13,5 @@ function log(){
     if(date2.length != 0) params.append("before", date2);
     if(contains.length != 0) params.append("contains", contains);
 
-    window.location.href = window.location.origin + "?" + params;
+    window.location.href = window.location.origin + "/logs" + "?" + params;
 }
