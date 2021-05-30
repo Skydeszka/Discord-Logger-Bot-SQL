@@ -16,8 +16,18 @@ const port = process.env.PORT || 3000;
 
 
 app.get('/', (req, res) =>{
-    res.render('foundlog', {
-        //messages: 
+    const author = req.query.author;
+    const useID = req.query.useid;
+    const since = req.query.since;
+    const before = req.query.before;
+    const contains = req.query.contains;
+
+    console.log(author, useID, since, before, contains)
+
+    db.GetMessages(author, useID, since, before, contains).then(rows => {
+        res.render('foundlog', {
+            messages: rows
+        })
     })
 });
 
