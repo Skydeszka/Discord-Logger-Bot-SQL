@@ -51,20 +51,26 @@ app.get('/logs', (req, res) =>{
 app.get('/edits', (req, res) => {
     const author = req.query.author;
     const useID = helper.ParseBool(req.query.useid);
-    const since = req.query.since;
-    const before = req.query.before;
-    const contains = req.query.contains;
+    const originsince = req.query.originsince;
+    const originbefore = req.query.originbefore;
+    const origincontains = req.query.origincontains;
+    const editsince = req.query.editsince;
+    const editbefore = req.query.editbefore;
+    const editcontains = req.query.editcontains;
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetEdits(author, useID, since, before, contains).then(rows => {
+    db.GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains).then(rows => {
         res.render('editpage', {
             url: fullUrl,
             author: author,
             useID: useID,
-            since: since,
-            before: before,
-            contains: contains,
+            originsince: originsince,
+            originbefore: originbefore,
+            origincontains: origincontains,
+            editsince: editsince,
+            editbefore: editbefore,
+            editcontains: editcontains,
             edits: rows
         });
     });

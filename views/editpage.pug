@@ -24,18 +24,26 @@ html(lang="en")
                     label Use user ID:
                     br
 
-                    label Since:
-                    input(type="datetime-local", id="date1", value=since)
-                    label Before:
-                    input(type="datetime-local", id="date2", value=before)
+                    label Originals since:
+                    input(type="datetime-local", id="origindate1", value=originsince)
+                    label Originals before:
+                    input(type="datetime-local", id="origindate2", value=originbefore)
 
                     br
 
-                    input(type="text", id="contains", placeholder="Edit Contains", value=contains)
+                    label Edits since:
+                    input(type="datetime-local", id="editdate1", value=editsince)
+                    label Edits before:
+                    input(type="datetime-local", id="editdate2", value=editbefore)
 
                     br
 
-                input(type="button", id="find", onclick="log()" value="Search")
+                    input(type="text", id="origincontains", placeholder="Original Contains", value=origincontains)
+                    input(type="text", id="editcontains", placeholder="Edit Contains", value=editcontains)
+
+                    br
+
+                input(type="button", id="find", onclick="search()" value="Search")
                 input(type="button", id="reset", onclick="reset()", value="Reset")
 
         if edits.length > 0

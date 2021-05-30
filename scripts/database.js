@@ -47,7 +47,7 @@ function _ReadMessages(author, useID, since, before, contains){
         else
           selector += `WHERE DateOfMessage > "${_since}" `;
       }
-      else if(!_since && before){
+      else if(!_since && _before){
         if(_HasWHERE(selector))
           selector += `AND DateOfMessage < "${_before}" `;
         else
@@ -78,10 +78,12 @@ function _ReadMessages(author, useID, since, before, contains){
 };
 
 
-function _ReadEdits(author, useID, since, before, contains){
+function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
   return new Promise((reslove, reject) => {
-    const _since = _ValidateDate(since);
-    const _before = _ValidateDate(before);
+    const _originsince = _ValidateDate(originsince);
+    const _originbefore = _ValidateDate(originbefore);
+    const _editsince = _ValidateDate(editsince);
+    const _editbefore = _ValidateDate(editbefore);
 
     let selector = "SELECT * FROM edits ";
 
@@ -92,30 +94,56 @@ function _ReadEdits(author, useID, since, before, contains){
       selector += `WHERE Author = "${author}" `;
     }
 
-    if(_since && !_before){
+    if(_editsince && !_editbefore){
       if(_HasWHERE(selector))
-        selector += `AND DateOfEdit > "${_since}" `;
+        selector += `AND DateOfEdit > "${_editsince}" `;
       else
-        selector += `WHERE DateOfEdit > "${_since}" `;
+        selector += `WHERE DateOfEdit > "${_editsince}" `;
     }
-    else if(!_since && before){
+    else if(!_editsince && _editbefore){
       if(_HasWHERE(selector))
-        selector += `AND DateOfEdit < "${_before}" `;
+        selector += `AND DateOfEdit < "${_editbefore}" `;
       else
-        selector += `WHERE DateOfEdit < "${_before}" `;
+        selector += `WHERE DateOfEdit < "${_editbefore}" `;
     }
-    else if(_since && _before){
+    else if(_editsince && _editbefore){
       if(_HasWHERE(selector))
-        selector += `AND DateOfEdit BETWEEN "${_since}" AND "${_before}" `;
+        selector += `AND DateOfEdit BETWEEN "${_editsince}" AND "${_editbefore}" `;
       else
-        selector += `WHERE DateOfEdit BETWEEN "${_since}" AND "${_before}" `;
+        selector += `WHERE DateOfEdit BETWEEN "${_editsince}" AND "${_editbefore}" `;
     }
 
-    if(contains != null){
+    if(_originsince && !_originbefore){
       if(_HasWHERE(selector))
-        selector += `AND EditedContent LIKE "%${contains}%"`;
+        selector += `AND DateOfOriginal > "${_originsince}" `;
       else
-        selector += `WHERE EditedContent LIKE "%${contains}%"`;
+        selector += `WHERE DateOfOriginal > "${_originsince}" `;
+    }
+    else if(!_originsince && _originbefore){
+      if(_HasWHERE(selector))
+        selector += `AND DateOfOriginal < "${_originbefore}" `;
+      else
+        selector += `WHERE DateOfOriginal < "${_originbefore}" `;
+    }
+    else if(_originsince && _originbefore){
+      if(_HasWHERE(selector))
+        selector += `AND DateOfOriginal BETWEEN "${_originsince}" AND "${_originbefore}" `;
+      else
+        selector += `WHERE DateOfOriginal BETWEEN "${_originsince}" AND "${_originbefore}" `;
+    }
+
+    if(editcontains != null){
+      if(_HasWHERE(selector))
+        selector += `AND EditedContent LIKE "%${editcontains}%"`;
+      else
+        selector += `WHERE EditedContent LIKE "%${editcontains}%"`;
+    }
+
+    if(origincontains != null){
+      if(_HasWHERE(selector))
+        selector += `AND OriginalContent LIKE "%${origincontains}%"`;
+      else
+        selector += `WHERE OriginalContent LIKE "%${origincontains}%"`;
     }
 
     conn = _OpenDB();
@@ -133,8 +161,8 @@ function GetMessages(author, useID, since, before, contains){
   return _ReadMessages(author, useID, since, before, contains);
 }
 
-function GetEdits(author, useID, since, before, contains){
-  return _ReadEdits(author, useID, since, before, contains);
+function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
+  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains);
 }
 
 module.exports = { GetMessages, GetEdits }
