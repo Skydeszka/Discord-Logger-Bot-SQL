@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3000;
 
 
-app.get('/', (req, res) =>{
+app.get('/logs', (req, res) =>{
     const author = req.query.author;
     const useID = req.query.useid;
     const since = req.query.since;
