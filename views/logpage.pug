@@ -15,20 +15,20 @@ html(lang="en")
             br
 
             form#searchForm
-                input(type="text", id="authorName", placeholder="Message Author")
+                input(type="text", id="authorName", placeholder="Message Author", value=author)
 
-                input(type="checkbox", id="useID")
+                input(type="checkbox", id="useID", checked=useID)
                 label Use user ID:
                 br
 
                 label Since:
-                input(type="datetime-local", id="date1")
+                input(type="datetime-local", id="date1", value=since)
                 label Before:
-                input(type="datetime-local", id="date2")
+                input(type="datetime-local", id="date2", value=before)
 
                 br
 
-                input(type="text", id="contains", placeholder="Contains")
+                input(type="text", id="contains", placeholder="Contains", value=contains)
 
                 br
 

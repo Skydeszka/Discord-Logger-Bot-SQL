@@ -27,6 +27,11 @@ app.get('/', (req, res) =>{
 
     db.GetMessages(author, useID, since, before, contains).then(rows => {
         res.render('logpage', {
+            author: author,
+            useID: useID,
+            since: since,
+            before: before,
+            contains: contains,
             messages: rows
         })
     })
