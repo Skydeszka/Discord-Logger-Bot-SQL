@@ -10,31 +10,33 @@ html(lang="en")
         link(rel="preconnect" href="https://fonts.gstatic.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet")
     body
-        div#panel
-            h1.header Log database
-
-            br
-
-            form#searchForm
-                input(type="text", id="authorName", placeholder="Message Author", value=author)
-
-                input(type="checkbox", id="useID", checked=useID)
-                label Use user ID:
-                br
-
-                label Since:
-                input(type="datetime-local", id="date1", value=since)
-                label Before:
-                input(type="datetime-local", id="date2", value=before)
+        section#panel-main
+            a(href=`http://localhost:${port}`) Back to menu
+            div#panel
+                h1.header Log database
 
                 br
 
-                input(type="text", id="contains", placeholder="Contains", value=contains)
+                form#searchForm
+                    input(type="text", id="authorName", placeholder="Message Author", value=author)
 
-                br
+                    input(type="checkbox", id="useID", checked=useID)
+                    label Use user ID:
+                    br
 
-            input(type="button", id="find", onclick="log()" value="Search")
-            input(type="button", id="reset", onclick="reset()", value="Reset")
+                    label Since:
+                    input(type="datetime-local", id="date1", value=since)
+                    label Before:
+                    input(type="datetime-local", id="date2", value=before)
+
+                    br
+
+                    input(type="text", id="contains", placeholder="Contains", value=contains)
+
+                    br
+
+                input(type="button", id="find", onclick="log()" value="Search")
+                input(type="button", id="reset", onclick="reset()", value="Reset")
 
         if messages.length > 0
             p Logs found: #{messages.length}

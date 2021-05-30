@@ -17,7 +17,9 @@ const port = process.env.PORT || 3000;
 
 
 app.get('/', (req, res) =>{
-    res.render('main');
+    res.render('main', {
+        port: port
+    });
 });
 
 
@@ -32,6 +34,7 @@ app.get('/logs', (req, res) =>{
 
     db.GetMessages(author, useID, since, before, contains).then(rows => {
         res.render('logpage', {
+            port: port,
             author: author,
             useID: useID,
             since: since,
