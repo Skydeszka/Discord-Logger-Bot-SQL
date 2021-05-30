@@ -11,10 +11,12 @@ function _OpenDB(){
 
 
 function _ValidateDate(date){
-  _date = Date.parse(date);
+  let _date = Date.parse(date);
 
-  if(!isNaN(date))
-    return _date;
+  if(!isNaN(_date)){
+    _date = new Date(_date);
+    return new Date(_date.getTime() - _date.getTimezoneOffset() * 60000).toISOString().slice(0,19).replace('T', ' ')
+  }
   else
     return false;
 }
