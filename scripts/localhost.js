@@ -17,8 +17,10 @@ const port = process.env.PORT || 3000;
 
 
 app.get('/', (req, res) =>{
+    const fullUrl = req.protocol + "://" + req.get('host');
+
     res.render('main', {
-        url: req.get('host')
+        url: fullUrl
     });
 });
 
@@ -30,11 +32,11 @@ app.get('/logs', (req, res) =>{
     const before = req.query.before;
     const contains = req.query.contains;
 
-
+    const fullUrl = req.protocol + "://" + req.get('host');
 
     db.GetMessages(author, useID, since, before, contains).then(rows => {
         res.render('logpage', {
-            url: req.get('host'),
+            url: fullUrl,
             author: author,
             useID: useID,
             since: since,
