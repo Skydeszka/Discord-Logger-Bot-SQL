@@ -22,10 +22,11 @@ app.get('/', (req, res) =>{
     const before = req.query.before;
     const contains = req.query.contains;
 
+
     console.log(author, useID, since, before, contains)
 
     db.GetMessages(author, useID, since, before, contains).then(rows => {
-        res.render('foundlog', {
+        res.render('logpage', {
             messages: rows
         })
     })
