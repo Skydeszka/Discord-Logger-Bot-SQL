@@ -1,6 +1,6 @@
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 
-function open_db(){
+function _OpenDB(){
     return new sqlite3.Database('./database/logs.db3', sqlite3.OPEN_READONLY, (err) => {
         if (err) {
           console.error(err.message);
@@ -10,4 +10,75 @@ function open_db(){
 };
 
 
-module.exports = {}
+function _ValidateDate(date){
+  _date = Date.parse(date);
+
+  if(!isNaN(date))
+    return _date;
+  else
+    return false;
+}
+
+
+function _HasWHERE(selector){
+  return selector.includes(" WHERE ");
+}
+
+
+function _ReadMessages(author, useID, since, before, contains){
+    return new Promise((reslove, reject) => {
+      const _since = _ValidateDate(since);
+      const _before = _ValidateDate(before);
+
+      let selector = "SELECT * FROM messages ";
+
+      if(author != null){
+        if(useID == "true")
+          selector += `WHERE AuthorID = "${author}" `;
+        else
+        selector += `WHERE Author = "${author}" `;
+      }
+
+      if(_since && !_before){
+        if(_HasWHERE(selector))
+          selector += `AND DateOfMessage > "${_since}" `;
+        else
+          selector += `WHERE DateOfMessage > "${_since}" `;
+      }
+      else if(!_since && before){
+        if(_HasWHERE(selector))
+          selector += `AND DateOfMessage < "${_before}" `;
+        else
+          selector += `WHERE DateOfMessage < "${_before}" `;
+      }
+      else if(_since && _before){
+        if(_HasWHERE(selector))
+          selector += `AND DateOfMessage BETWEEN "${_since}" AND "${_before}" `;
+        else
+          selector += `WHERE DateOfMessage BETWEEN "${_since}" AND "${_before}" `;
+      }
+
+      if(contains != null){
+        if(_HasWHERE(selector))
+          selector += `AND Content LIKE "%${contains}%"`;
+        else
+          selector += `WHERE Content LIKE "%${contains}%"`;
+      }
+
+      conn = _OpenDB();
+
+      conn.all(selector, [], (err, rows) =>{
+        if(err) reject(err);
+
+        reslove(rows);
+      });
+
+      console.log(selector);
+  });
+};
+
+function GetMessages(author, useID, since, before, contains){
+  return _ReadMessages(author, useID, since, before, contains);
+}
+
+module.exports = { GetMessages }
