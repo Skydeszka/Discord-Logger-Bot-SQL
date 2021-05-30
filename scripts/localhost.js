@@ -9,7 +9,6 @@ const helper = require("./helper");
 const app = express();
 app.set('view engine', 'pug');
 const stat_path = path.join(__dirname + "../..//public");
-console.log(stat_path);
 app.use(express.static(stat_path));
 app.use(bodyParser.json());
 
@@ -18,7 +17,7 @@ const port = process.env.PORT || 3000;
 
 
 app.get('/', (req, res) =>{
-    res.send("Hello world");
+    res.render('main');
 });
 
 
