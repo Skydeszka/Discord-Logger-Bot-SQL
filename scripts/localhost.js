@@ -23,8 +23,6 @@ app.get('/', (req, res) =>{
     const contains = req.query.contains;
 
 
-    console.log(author, useID, since, before, contains)
-
     db.GetMessages(author, useID, since, before, contains).then(rows => {
         res.render('logpage', {
             author: author,

@@ -74,8 +74,6 @@ function _ReadMessages(author, useID, since, before, contains){
 
         reslove(rows);
       });
-
-      console.log(selector);
   });
 };
 
