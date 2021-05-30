@@ -43,9 +43,33 @@ app.get('/logs', (req, res) =>{
             before: before,
             contains: contains,
             messages: rows
-        })
-    })
+        });
+    });
 });
+
+
+app.get('/edits', (req, res) => {
+    const author = req.query.author;
+    const useID = helper.ParseBool(req.query.useid);
+    const since = req.query.since;
+    const before = req.query.before;
+    const contains = req.query.contains;
+
+    const fullUrl = req.protocol + "://" + req.get('host');
+
+    db.GetEdits(author, useID, since, before, contains).then(rows => {
+        res.render('editpage', {
+            url: fullUrl,
+            author: author,
+            useID: useID,
+            since: since,
+            before: before,
+            contains: contains,
+            edits: rows
+        });
+    });
+});
+
 
 app.listen(port, () =>{
     console.log(`Listening on port ${port}...`);

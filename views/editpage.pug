@@ -1,0 +1,63 @@
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Logs
+        link(rel='stylesheet', href='/universal.css')
+        link(rel='stylesheet', href='/edits/style.css')
+        script(src='/edits/script.js')
+        link(rel="preconnect" href="https://fonts.gstatic.com")
+        link(href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet")
+    body
+        section#panel-main
+            a(href=`${url}`) Back to menu
+            div#panel
+                h1.header Edit database
+
+                br
+
+                form#searchForm
+                    input(type="text", id="authorName", placeholder="Message Author", value=author)
+
+                    input(type="checkbox", id="useID", checked=useID)
+                    label Use user ID:
+                    br
+
+                    label Since:
+                    input(type="datetime-local", id="date1", value=since)
+                    label Before:
+                    input(type="datetime-local", id="date2", value=before)
+
+                    br
+
+                    input(type="text", id="contains", placeholder="Edit Contains", value=contains)
+
+                    br
+
+                input(type="button", id="find", onclick="log()" value="Search")
+                input(type="button", id="reset", onclick="reset()", value="Reset")
+
+        if edits.length > 0
+            p Edits found: #{edits.length}
+
+            table#edge
+                tr#header
+                    td Message ID
+                    td Author 
+                    td Author ID 
+                    td Date Of Message 
+                    td Date Of Edit 
+                    td Original Content
+                    td Edited Content
+                each edit in edits
+                    tr.data
+                        td= edit.MessageID
+                        td= edit.Author
+                        td= edit.AuthorID 
+                        td= edit.DateOfOriginal
+                        td= edit.DateOfEdit
+                        td.content= edit.OriginalContent
+                        td.content= edit.EditedContent
+        else 
+            p No edits found

@@ -1,0 +1,53 @@
+*{
+    align-content: center;
+    margin: auto;
+    margin: 5px;
+}
+
+table{
+    font-size: 16px;
+}
+
+#panel{
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+#edge{
+    border: 5px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#header{
+    font-weight: bold;
+}
+
+#header{
+    border: 3px solid black;
+    background-color: lightgray;
+}
+
+.data{
+    border: 2px solid black;
+}
+
+.data:nth-child(odd){
+    background-color: lightgray;
+}
+
+.data:hover{
+    font-weight: bolder;
+}
+
+td{
+    border-left: 1px solid black;
+    padding: .5em;
+}
+
+
+.content{
+    color: black;
+}
