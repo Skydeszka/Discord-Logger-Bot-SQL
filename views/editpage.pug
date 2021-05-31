@@ -49,6 +49,14 @@ html(lang="en")
         if edits.length > 0
             p Edits found: #{edits.length}
 
+            div#pages-main
+                if page != 1
+                    input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}
+        
+                input(type="button", id="next", onclick="changepage(1)", value="=>")
+
             table#edge
                 tr#header
                     td Message ID
@@ -69,3 +77,8 @@ html(lang="en")
                         td.content= edit.EditedContent
         else 
             p No edits found
+
+            div#pages-main
+                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}

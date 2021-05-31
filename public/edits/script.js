@@ -19,7 +19,7 @@ function search(){
     if(origincontains.length != 0) params.append("origincontains", origincontains);
     if(editcontains.length != 0) params.append("editcontains", editcontains);
 
-    window.location.href = window.location.origin + "/edits" + "?" + params;
+    window.location.href = window.location.origin + "/edits/" + "?" + params;
 }
 
 
@@ -33,5 +33,33 @@ function reset(){
     const origincontains = document.getElementById("origincontains").value = null;
     const editcontains = document.getElementById("editcontains").value = null;
 
-    window.location.href = window.location.origin + "/edits"
+    window.location.href = window.location.origin + "/edits/"
+}
+
+function changepage(offset){
+
+    let params = new URLSearchParams(document.location.search);
+
+    let paramString = new URLSearchParams();
+
+    let page = false;
+
+    params.forEach((value, key) => {
+        if(key == "page")
+            page = parseInt(value);
+        else
+            paramString.append(key, value);
+    });
+
+    if(!page)
+        page = 1
+
+    page += offset;
+
+    if(page < 1)
+        page = 1
+
+    paramString.append("page", page);
+
+    window.location.href = window.location.origin + "/edits/" + "?" + paramString;
 }

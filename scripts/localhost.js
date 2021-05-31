@@ -63,12 +63,17 @@ app.get('/edits', (req, res) => {
     const editsince = req.query.editsince;
     const editbefore = req.query.editbefore;
     const editcontains = req.query.editcontains;
+    let page = 1;
+
+    if(!isNaN(parseInt(req.query.page)))
+        page = req.query.page;
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains).then(rows => {
+    db.GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page).then(rows => {
         res.render('editpage', {
             url: fullUrl,
+            page: page,
             author: author,
             useID: useID,
             originsince: originsince,
