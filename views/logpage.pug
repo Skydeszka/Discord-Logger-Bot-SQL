@@ -60,9 +60,12 @@ html(lang="en")
                         if sorttype == "asc"
                             option(value="asc", selected disabled hidden) Ascending 
                             option(value="desc") Descending
-                        else
+                        else if sorttype = "desc"
                             option(value="asc") Ascending 
                             option(value="desc", selected disabled hidden) Descending
+                        else 
+                            option(value="asc") Ascending 
+                            option(value="desc") Descending
                     
                     br
 
