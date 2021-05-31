@@ -35,9 +35,9 @@ html(lang="en")
 
                     br
 
-                    - const date = "date";
-                    - const author = "author";
-                    - const content = "content"
+                    - const sortbydate = "date";
+                    - const sortbyauthor = "author";
+                    - const sortbycontent = "content"
 
                     select#sortby(name = "Sort by")
                         if sortby == "none"
@@ -45,20 +45,20 @@ html(lang="en")
                         else
                             option(value="none") None
 
-                        if sortby == date
-                            option(value=date, selected disabled hidden) Date
+                        if sortby == sortbydate
+                            option(value=sortbydate, selected disabled hidden) Date
                         else
-                            option(value=date) Date
+                            option(value=sortbydate) Date
 
-                        if sortby == author
-                            option(value=author, selected disabled hidden) Author
+                        if sortby == sortbyauthor
+                            option(value=sortbyauthor, selected disabled hidden) Author
                         else
-                            option(value=author) Author
+                            option(value=sortbyauthor) Author
 
-                        if sortby == content
-                            option(value=content, selected disabled hidden) Content
+                        if sortby == sortbycontent
+                            option(value=sortbycontent, selected disabled hidden) Content
                         else
-                            option(value=content) Content
+                            option(value=sortbycontent) Content
                     
                     br
 
