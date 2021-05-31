@@ -22,12 +22,12 @@ table{
 }
 
 #header{
-    font-weight: bold;
-}
-
-#header{
     border: 3px solid black;
     background-color: lightgray;
+    font-weight: bold;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .data{
