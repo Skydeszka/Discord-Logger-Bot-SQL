@@ -71,6 +71,8 @@ function _ReadMessages(author, useID, since, before, contains, page = 1){
 
       selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
 
+      console.log(selector);
+
       conn = _OpenDB();
 
       conn.all(selector, [], (err, rows) =>{
@@ -149,6 +151,8 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
       else
         selector += `WHERE OriginalContent LIKE "%${origincontains}%"`;
     }
+
+    selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
 
     conn = _OpenDB();
 

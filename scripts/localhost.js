@@ -42,6 +42,7 @@ app.get('/logs', (req, res) =>{
     db.GetMessages(author, useID, since, before, contains, page).then(rows => {
         res.render('logpage', {
             url: fullUrl,
+            page: page,
             author: author,
             useID: useID,
             since: since,

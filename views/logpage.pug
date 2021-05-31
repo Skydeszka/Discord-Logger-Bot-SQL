@@ -41,6 +41,13 @@ html(lang="en")
         if messages.length > 0
             p Logs found: #{messages.length}
 
+            div#pages-main
+                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}
+        
+                input(type="button", id="next", onclick="changepage(1)", value="=>")
+
             table#edge
                 tr#header
                     td Message ID
@@ -56,4 +63,9 @@ html(lang="en")
                         td= msg.DateOfMessage 
                         td.content= msg.Content
         else 
+            div#pages-main
+                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}
+
             p No Logs found

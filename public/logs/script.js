@@ -26,3 +26,32 @@ function reset(){
 
     window.location.href = window.location.origin + "/logs"
 }
+
+
+function changepage(offset){
+
+    let params = new URLSearchParams(document.location.search);
+
+    let paramString = new URLSearchParams();
+
+    let page = false;
+
+    params.forEach((value, key) => {
+        if(key == "page")
+            page = parseInt(value);
+        else
+            paramString.append(key, value);
+    });
+
+    if(!page)
+        page = 1
+
+    page += offset;
+
+    if(page < 1)
+        page = 1
+
+    paramString.append("page", page);
+
+    window.location.href = window.location.origin + "/logs" + "?" + paramString;
+}
