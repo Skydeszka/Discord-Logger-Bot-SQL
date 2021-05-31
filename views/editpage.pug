@@ -43,6 +43,46 @@ html(lang="en")
 
                     br
 
+                    - const origindate = "origindate";
+                    - const editdate = "editdate";
+                    - const author = "author";
+                    - const origincontent = "origincontent"
+                    - const editcontent = "editcontent"
+
+                    select#sortby(name = "Sort by")
+                        if sortby == "none"
+                            option(value="none", selected disabled hidden) None
+                        else
+                            option(value="none") None
+
+                        if sortby == origindate
+                            option(value=origindate, selected disabled hidden) Date
+                        else
+                            option(value=origindate) Date
+
+                        if sortby == author
+                            option(value=author, selected disabled hidden) Author
+                        else
+                            option(value=author) Author
+
+                        if sortby == origincontent
+                            option(value=origincontent, selected disabled hidden) Content
+                        else
+                            option(value=origincontent) Content
+
+                    select#sorttype(name = "Sort type", selected=sorttype)
+                        if sorttype == "asc"
+                            option(value="asc", selected disabled hidden) Ascending 
+                            option(value="desc") Descending
+                        else if sorttype = "desc"
+                            option(value="asc") Ascending 
+                            option(value="desc", selected disabled hidden) Descending
+                        else 
+                            option(value="asc") Ascending 
+                            option(value="desc") Descending
+
+                    br
+
                 input(type="button", id="find", onclick="search()" value="Search")
                 input(type="button", id="reset", onclick="reset()", value="Reset")
 
