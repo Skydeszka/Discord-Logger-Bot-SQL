@@ -6,6 +6,7 @@ html(lang="en")
         title Logs
         link(rel='stylesheet', href='/universal.css')
         link(rel='stylesheet', href='/logs/style.css')
+        link(rel='stylesheet', href='/tables.css')
         script(src='/logs/script.js')
         link(rel="preconnect" href="https://fonts.gstatic.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet")
@@ -35,11 +36,58 @@ html(lang="en")
 
                     br
 
+                    - const sortbydate = "date";
+                    - const sortbyauthor = "author";
+                    - const sortbycontent = "content"
+
+                    select#sortby(name = "Sort by")
+                        if sortby == "none"
+                            option(value="none", selected disabled hidden) None
+                        else
+                            option(value="none") None
+
+                        if sortby == sortbydate
+                            option(value=sortbydate, selected disabled hidden) Date
+                        else
+                            option(value=sortbydate) Date
+
+                        if sortby == sortbyauthor
+                            option(value=sortbyauthor, selected disabled hidden) Author
+                        else
+                            option(value=sortbyauthor) Author
+
+                        if sortby == sortbycontent
+                            option(value=sortbycontent, selected disabled hidden) Content
+                        else
+                            option(value=sortbycontent) Content
+                    
+                    select#sorttype(name = "Sort type", selected=sorttype)
+                        if sorttype == "asc"
+                            option(value="asc", selected disabled hidden) Ascending 
+                            option(value="desc") Descending
+                        else if sorttype = "desc"
+                            option(value="asc") Ascending 
+                            option(value="desc", selected disabled hidden) Descending
+                        else 
+                            option(value="asc") Ascending 
+                            option(value="desc") Descending
+
+                    br
+
                 input(type="button", id="find", onclick="search()" value="Search")
                 input(type="button", id="reset", onclick="reset()", value="Reset")
 
         if messages.length > 0
             p Logs found: #{messages.length}
+
+            div#pages-main
+                if page != 1
+                    input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline Page: #{page}
+        
+                if messages.length == 100
+                    input(type="button", id="next", onclick="changepage(1)", value="=>")
 
             table#edge
                 tr#header
@@ -56,4 +104,9 @@ html(lang="en")
                         td= msg.DateOfMessage 
                         td.content= msg.Content
         else 
+            div#pages-main
+                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}
+
             p No Logs found

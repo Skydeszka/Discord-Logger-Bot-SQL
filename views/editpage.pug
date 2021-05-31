@@ -5,6 +5,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Logs
         link(rel='stylesheet', href='/universal.css')
+        link(rel='stylesheet', href='/tables.css')
         link(rel='stylesheet', href='/edits/style.css')
         script(src='/edits/script.js')
         link(rel="preconnect" href="https://fonts.gstatic.com")
@@ -43,11 +44,70 @@ html(lang="en")
 
                     br
 
+                    - const sortbyorigindate = "origindate";
+                    - const sortbyeditdate = "editdate";
+                    - const sortbyauthor = "author";
+                    - const sortbyorigincontent = "origincontent"
+                    - const sortbyeditcontent = "editcontent"
+
+                    select#sortby(name = "Sort by")
+                        if sortby == "none"
+                            option(value="none", selected disabled hidden) None
+                        else
+                            option(value="none") None
+
+                        if sortby == sortbyorigindate
+                            option(value=sortbyorigindate, selected disabled hidden) Original Message Date
+                        else
+                            option(value=sortbyorigindate) Original Message Date
+
+                        if sortby == sortbyeditdate
+                            option(value=sortbyeditdate, selected disabled hidden) Edited Message Date
+                        else
+                            option(value=sortbyeditdate) Edited Message Date
+
+                        if sortby == sortbyauthor
+                            option(value=sortbyauthor, selected disabled hidden) Author
+                        else
+                            option(value=sortbyauthor) Author
+
+                        if sortby == sortbyorigincontent
+                            option(value=sortbyorigincontent, selected disabled hidden) Original Content
+                        else
+                            option(value=sortbyorigincontent) Original Content
+
+                        if sortby == sortbyeditcontent
+                            option(value=sortbyeditcontent, selected disabled hidden) Edited Content
+                        else
+                            option(value=sortbyeditcontent) Edited Content
+
+                    select#sorttype(name = "Sort type", selected=sorttype)
+                        if sorttype == "asc"
+                            option(value="asc", selected disabled hidden) Ascending 
+                            option(value="desc") Descending
+                        else if sorttype = "desc"
+                            option(value="asc") Ascending 
+                            option(value="desc", selected disabled hidden) Descending
+                        else 
+                            option(value="asc") Ascending 
+                            option(value="desc") Descending
+
+                    br
+
                 input(type="button", id="find", onclick="search()" value="Search")
                 input(type="button", id="reset", onclick="reset()", value="Reset")
 
         if edits.length > 0
             p Edits found: #{edits.length}
+
+            div#pages-main
+                if page != 1
+                    input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline Page: #{page}
+        
+                if edits.length == 100
+                    input(type="button", id="next", onclick="changepage(1)", value="=>")
 
             table#edge
                 tr#header
@@ -69,3 +129,7 @@ html(lang="en")
                         td.content= edit.EditedContent
         else 
             p No edits found
+            div#pages-main
+                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+
+                inline #{page}

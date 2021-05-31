@@ -21,4 +21,8 @@ function ParseBool(value){
         return false;
 }
 
-module.exports = { ParseBool }
+function PageOffset(currentPage = 1, listPerPage){
+    return (currentPage - 1) * [listPerPage];
+}
+
+module.exports = { ParseBool, PageOffset }

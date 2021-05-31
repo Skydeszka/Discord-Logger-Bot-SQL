@@ -31,17 +31,27 @@ app.get('/logs', (req, res) =>{
     const since = req.query.since;
     const before = req.query.before;
     const contains = req.query.contains;
+    const sortby = req.query.sortby;
+    const sorttype = req.query.sorttype;
+    let page = 1;
+
+    if(!isNaN(parseInt(req.query.page)))
+        page = req.query.page;
+        
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetMessages(author, useID, since, before, contains).then(rows => {
+    db.GetMessages(author, useID, since, before, contains, page, sortby, sorttype).then(rows => {
         res.render('logpage', {
             url: fullUrl,
+            page: page,
             author: author,
             useID: useID,
             since: since,
             before: before,
             contains: contains,
+            sortby: sortby,
+            sorttype: sorttype,
             messages: rows
         });
     });
@@ -57,12 +67,19 @@ app.get('/edits', (req, res) => {
     const editsince = req.query.editsince;
     const editbefore = req.query.editbefore;
     const editcontains = req.query.editcontains;
+    const sortby = req.query.sortby;
+    const sorttype = req.query.sorttype;
+    let page = 1;
+
+    if(!isNaN(parseInt(req.query.page)))
+        page = req.query.page;
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains).then(rows => {
+    db.GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page, sortby, sorttype).then(rows => {
         res.render('editpage', {
             url: fullUrl,
+            page: page,
             author: author,
             useID: useID,
             originsince: originsince,
@@ -71,11 +88,16 @@ app.get('/edits', (req, res) => {
             editsince: editsince,
             editbefore: editbefore,
             editcontains: editcontains,
+            sortby: sortby,
+            sorttype: sorttype,
             edits: rows
         });
     });
 });
 
+app.use((req, res) =>{
+    res.render('error404');
+});
 
 app.listen(port, () =>{
     console.log(`Listening on port ${port}...`);

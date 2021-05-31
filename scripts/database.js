@@ -1,4 +1,6 @@
 const sqlite3 = require('sqlite3');
+const helper = require('./helper');
+const config = require('./config');
 
 function _OpenDB(){
     return new sqlite3.Database('./database/logs.db3', sqlite3.OPEN_READONLY, (err) => {
@@ -22,15 +24,25 @@ function _ValidateDate(date){
 }
 
 
+function _ValidateSortyType(sorttype){
+  if(sorttype == "desc")
+    return "DESC";
+  else
+    return "ASC";
+}
+
+
 function _HasWHERE(selector){
   return selector.includes(" WHERE ");
 }
 
 
-function _ReadMessages(author, useID, since, before, contains){
+function _ReadMessages(author, useID, since, before, contains, page, sortby, sorttype){
     return new Promise((reslove, reject) => {
       const _since = _ValidateDate(since);
       const _before = _ValidateDate(before);
+      const _sorttype = _ValidateSortyType(sorttype);
+
 
       let selector = "SELECT * FROM messages ";
 
@@ -67,6 +79,21 @@ function _ReadMessages(author, useID, since, before, contains){
           selector += `WHERE Content LIKE "%${contains}%"`;
       }
 
+      if(sortby != null){
+        if(sortby == "date")
+          selector += `ORDER BY DateOfMessage ${_sorttype} `;
+        else if(sortby == "content")
+          selector += `ORDER BY Content ${_sorttype} `;
+        else if(sortby == "author"){
+          if(useID)
+            selector += `ORDER BY AuthorID ${_sorttype} `;
+          else
+            selector += `ORDER BY Author ${_sorttype} `;
+        }
+      }
+
+      selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
+
       conn = _OpenDB();
 
       conn.all(selector, [], (err, rows) =>{
@@ -78,12 +105,13 @@ function _ReadMessages(author, useID, since, before, contains){
 };
 
 
-function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
+function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page, sortby, sorttype){
   return new Promise((reslove, reject) => {
     const _originsince = _ValidateDate(originsince);
     const _originbefore = _ValidateDate(originbefore);
     const _editsince = _ValidateDate(editsince);
     const _editbefore = _ValidateDate(editbefore);
+    const _sorttype = _ValidateSortyType(sorttype);
 
     let selector = "SELECT * FROM edits ";
 
@@ -146,6 +174,25 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
         selector += `WHERE OriginalContent LIKE "%${origincontains}%"`;
     }
 
+    if(sortby != null){
+      if(sortby == "origindate")
+        selector += `ORDER BY DateOfOriginal ${_sorttype} `;
+      if(sortby == "editdate")
+        selector += `ORDER BY DateOfEdit ${_sorttype} `;
+      else if(sortby == "origincontent")
+        selector += `ORDER BY OriginalContent ${_sorttype} `;
+      else if(sortby == "editcontent")
+        selector += `ORDER BY EditedContent ${_sorttype} `;
+      else if(sortby == "author"){
+        if(useID)
+          selector += `ORDER BY AuthorID ${_sorttype} `;
+        else
+          selector += `ORDER BY Author ${_sorttype} `;
+      }
+    }
+
+    selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
+
     conn = _OpenDB();
 
     conn.all(selector, [], (err, rows) =>{
@@ -157,12 +204,12 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
 };
 
 
-function GetMessages(author, useID, since, before, contains){
-  return _ReadMessages(author, useID, since, before, contains);
+function GetMessages(author, useID, since, before, contains, page = 1, sortby, sorttype){
+  return _ReadMessages(author, useID, since, before, contains, page, sortby, sorttype);
 }
 
-function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
-  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains);
+function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1, sortby, sorttype){
+  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page, sortby, sorttype);
 }
 
 module.exports = { GetMessages, GetEdits }
