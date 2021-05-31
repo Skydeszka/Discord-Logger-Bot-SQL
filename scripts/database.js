@@ -105,12 +105,13 @@ function _ReadMessages(author, useID, since, before, contains, page, sortby, sor
 };
 
 
-function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1){
+function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page, sortby, sorttype){
   return new Promise((reslove, reject) => {
     const _originsince = _ValidateDate(originsince);
     const _originbefore = _ValidateDate(originbefore);
     const _editsince = _ValidateDate(editsince);
     const _editbefore = _ValidateDate(editbefore);
+    const _sorttype = _ValidateSortyType(sorttype);
 
     let selector = "SELECT * FROM edits ";
 
@@ -173,6 +174,19 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
         selector += `WHERE OriginalContent LIKE "%${origincontains}%"`;
     }
 
+    if(sortby != null){
+      if(sortby == "origidate")
+        selector += `ORDER BY DateOfMessage ${_sorttype} `;
+      else if(sortby == "content")
+        selector += `ORDER BY Content ${_sorttype} `;
+      else if(sortby == "author"){
+        if(useID)
+          selector += `ORDER BY AuthorID ${_sorttype} `;
+        else
+          selector += `ORDER BY Author ${_sorttype} `;
+      }
+    }
+
     selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
 
     conn = _OpenDB();
@@ -190,8 +204,8 @@ function GetMessages(author, useID, since, before, contains, page = 1, sortby, s
   return _ReadMessages(author, useID, since, before, contains, page, sortby, sorttype);
 }
 
-function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1){
-  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page);
+function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1, sortby, sorttype){
+  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page, sortby, sorttype);
 }
 
 module.exports = { GetMessages, GetEdits }

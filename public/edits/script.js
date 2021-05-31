@@ -7,6 +7,8 @@ function search(){
     const editdate2 = document.getElementById("editdate2").value;
     const origincontains = document.getElementById("origincontains").value;
     const editcontains = document.getElementById("editcontains").value;
+    const sortby = document.getElementById("sortby").value;
+    const sorttype = document.getElementById("sorttype").value;
 
     let params = new URLSearchParams();
 
@@ -18,6 +20,10 @@ function search(){
     if(editdate2.length != 0) params.append("editbefore", editdate2);
     if(origincontains.length != 0) params.append("origincontains", origincontains);
     if(editcontains.length != 0) params.append("editcontains", editcontains);
+    if(sortby != "none"){
+        params.append("sortby", sortby);
+        params.append("sorttype", sorttype);
+    }
 
     window.location.href = window.location.origin + "/edits/" + "?" + params;
 }
@@ -32,6 +38,8 @@ function reset(){
     document.getElementById("editdate2").value = null;
     document.getElementById("origincontains").value = null;
     document.getElementById("editcontains").value = null;
+    document.getElementById("sortby").value = "none";
+    document.getElementById("sorttype").value = "asc";
 
     window.location.href = window.location.origin + "/edits/"
 }
