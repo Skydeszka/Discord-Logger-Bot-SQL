@@ -60,6 +60,17 @@ html(lang="en")
                         else
                             option(value=sortbycontent) Content
                     
+                    select#sorttype(name = "Sort type", selected=sorttype)
+                        if sorttype == "asc"
+                            option(value="asc", selected disabled hidden) Ascending 
+                            option(value="desc") Descending
+                        else if sorttype = "desc"
+                            option(value="asc") Ascending 
+                            option(value="desc", selected disabled hidden) Descending
+                        else 
+                            option(value="asc") Ascending 
+                            option(value="desc") Descending
+
                     br
 
                 input(type="button", id="find", onclick="search()" value="Search")
