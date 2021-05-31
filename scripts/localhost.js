@@ -31,10 +31,15 @@ app.get('/logs', (req, res) =>{
     const since = req.query.since;
     const before = req.query.before;
     const contains = req.query.contains;
+    let page = 1;
+
+    if(!isNaN(parseInt(req.query.page)))
+        page = req.query.page;
+        
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetMessages(author, useID, since, before, contains).then(rows => {
+    db.GetMessages(author, useID, since, before, contains, page).then(rows => {
         res.render('logpage', {
             url: fullUrl,
             author: author,
@@ -76,6 +81,9 @@ app.get('/edits', (req, res) => {
     });
 });
 
+app.use((req, res) =>{
+    res.render('error404');
+});
 
 app.listen(port, () =>{
     console.log(`Listening on port ${port}...`);
