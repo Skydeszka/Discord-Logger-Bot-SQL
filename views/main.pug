@@ -10,7 +10,8 @@ html(lang="en")
         link(rel="preconnect" href="https://fonts.gstatic.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet")
     body
-        h1 Log center
-        a(href=`${url}/logs`) Logs
-        br
-        a(href=`${url}/edits`) Edits
+        section#panel-main
+            div#panel
+                h1#header Log center
+                a.link(href=`${url}/logs`) Logs
+                a.link(href=`${url}/edits`) Edits
