@@ -84,7 +84,7 @@ html(lang="en")
                 if page != 1
                     input(type="button", id="previous", onclick="changepage(-1)", value="<=")
 
-                inline #{page}
+                inline Page: #{page}
         
                 if messages.length == 100
                     input(type="button", id="next", onclick="changepage(1)", value="=>")
