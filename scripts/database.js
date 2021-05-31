@@ -1,4 +1,6 @@
 const sqlite3 = require('sqlite3');
+const helper = require('./helper');
+const config = require('./config');
 
 function _OpenDB(){
     return new sqlite3.Database('./database/logs.db3', sqlite3.OPEN_READONLY, (err) => {
@@ -27,7 +29,7 @@ function _HasWHERE(selector){
 }
 
 
-function _ReadMessages(author, useID, since, before, contains){
+function _ReadMessages(author, useID, since, before, contains, page = 1){
     return new Promise((reslove, reject) => {
       const _since = _ValidateDate(since);
       const _before = _ValidateDate(before);
@@ -67,6 +69,8 @@ function _ReadMessages(author, useID, since, before, contains){
           selector += `WHERE Content LIKE "%${contains}%"`;
       }
 
+      selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
+
       conn = _OpenDB();
 
       conn.all(selector, [], (err, rows) =>{
@@ -78,7 +82,7 @@ function _ReadMessages(author, useID, since, before, contains){
 };
 
 
-function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
+function _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1){
   return new Promise((reslove, reject) => {
     const _originsince = _ValidateDate(originsince);
     const _originbefore = _ValidateDate(originbefore);
@@ -157,12 +161,12 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
 };
 
 
-function GetMessages(author, useID, since, before, contains){
-  return _ReadMessages(author, useID, since, before, contains);
+function GetMessages(author, useID, since, before, contains, page = 1){
+  return _ReadMessages(author, useID, since, before, contains, page);
 }
 
-function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains){
-  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains);
+function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1){
+  return _ReadEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page);
 }
 
 module.exports = { GetMessages, GetEdits }
