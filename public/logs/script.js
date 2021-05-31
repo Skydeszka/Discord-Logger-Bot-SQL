@@ -13,7 +13,7 @@ function search(){
     if(date2.length != 0) params.append("before", date2);
     if(contains.length != 0) params.append("contains", contains);
 
-    window.location.href = window.location.origin + "/logs" + "?" + params;
+    window.location.href = window.location.origin + "/logs/" + "?" + params;
 }
 
 
@@ -24,7 +24,7 @@ function reset(){
     const date2 = document.getElementById("date2").value = null;
     const contains = document.getElementById("contains").value = null;
 
-    window.location.href = window.location.origin + "/logs"
+    window.location.href = window.location.origin + "/logs/"
 }
 
 
@@ -53,5 +53,5 @@ function changepage(offset){
 
     paramString.append("page", page);
 
-    window.location.href = window.location.origin + "/logs" + "?" + paramString;
+    window.location.href = window.location.origin + "/logs/" + "?" + paramString;
 }

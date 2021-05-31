@@ -42,7 +42,8 @@ html(lang="en")
             p Logs found: #{messages.length}
 
             div#pages-main
-                input(type="button", id="previous", onclick="changepage(-1)", value="<=")
+                if page != 1
+                    input(type="button", id="previous", onclick="changepage(-1)", value="<=")
 
                 inline #{page}
         
