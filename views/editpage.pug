@@ -49,6 +49,8 @@ html(lang="en")
                     - const sortbyorigincontent = "origincontent"
                     - const sortbyeditcontent = "editcontent"
 
+                    p #{sortby} asd
+
                     select#sortby(name = "Sort by")
                         if sortby == "none"
                             option(value="none", selected disabled hidden) None
@@ -105,7 +107,7 @@ html(lang="en")
 
                 inline #{page}
         
-                if messages.length == 100
+                if edits.length == 100
                     input(type="button", id="next", onclick="changepage(1)", value="=>")
 
             table#edge

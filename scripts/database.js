@@ -175,10 +175,14 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
     }
 
     if(sortby != null){
-      if(sortby == "origidate")
-        selector += `ORDER BY DateOfMessage ${_sorttype} `;
-      else if(sortby == "content")
-        selector += `ORDER BY Content ${_sorttype} `;
+      if(sortby == "origindate")
+        selector += `ORDER BY DateOfOriginal ${_sorttype} `;
+      if(sortby == "editdate")
+        selector += `ORDER BY DateOfEdit ${_sorttype} `;
+      else if(sortby == "origincontent")
+        selector += `ORDER BY OriginalContent ${_sorttype} `;
+      else if(sortby == "editcontent")
+        selector += `ORDER BY EditedContent ${_sorttype} `;
       else if(sortby == "author"){
         if(useID)
           selector += `ORDER BY AuthorID ${_sorttype} `;
