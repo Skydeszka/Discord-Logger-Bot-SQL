@@ -24,15 +24,25 @@ function _ValidateDate(date){
 }
 
 
+function _ValidateSortyType(sorttype){
+  if(sorttype == "desc")
+    return "DESC";
+  else
+    return "ASC";
+}
+
+
 function _HasWHERE(selector){
   return selector.includes(" WHERE ");
 }
 
 
-function _ReadMessages(author, useID, since, before, contains, page = 1){
+function _ReadMessages(author, useID, since, before, contains, page, sortby, sorttype){
     return new Promise((reslove, reject) => {
       const _since = _ValidateDate(since);
       const _before = _ValidateDate(before);
+      const _sorttype = _ValidateSortyType(sorttype);
+
 
       let selector = "SELECT * FROM messages ";
 
@@ -67,6 +77,19 @@ function _ReadMessages(author, useID, since, before, contains, page = 1){
           selector += `AND Content LIKE "%${contains}%"`;
         else
           selector += `WHERE Content LIKE "%${contains}%"`;
+      }
+
+      if(sortby != null){
+        if(sortby == "date")
+          selector += `ORDER BY DateOfMessage ${_sorttype} `;
+        else if(sortby == "content")
+          selector += `ORDER BY Content ${_sorttype} `;
+        else if(sortby == "author"){
+          if(useID)
+            selector += `ORDER BY AuthorID ${_sorttype} `;
+          else
+            selector += `ORDER BY Author ${_sorttype} `;
+        }
       }
 
       selector += `LIMIT ${helper.PageOffset(page, config.config.listPerPage)}, ${config.config.listPerPage}`;
@@ -163,8 +186,8 @@ function _ReadEdits(author, useID, originsince, originbefore, editsince, editbef
 };
 
 
-function GetMessages(author, useID, since, before, contains, page = 1){
-  return _ReadMessages(author, useID, since, before, contains, page);
+function GetMessages(author, useID, since, before, contains, page = 1, sortby, sorttype){
+  return _ReadMessages(author, useID, since, before, contains, page, sortby, sorttype);
 }
 
 function GetEdits(author, useID, originsince, originbefore, editsince, editbefore, origincontains, editcontains, page = 1){

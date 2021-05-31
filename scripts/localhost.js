@@ -31,6 +31,8 @@ app.get('/logs', (req, res) =>{
     const since = req.query.since;
     const before = req.query.before;
     const contains = req.query.contains;
+    const sortby = req.query.sortby;
+    const sorttype = req.query.sorttype;
     let page = 1;
 
     if(!isNaN(parseInt(req.query.page)))
@@ -39,7 +41,7 @@ app.get('/logs', (req, res) =>{
 
     const fullUrl = req.protocol + "://" + req.get('host');
 
-    db.GetMessages(author, useID, since, before, contains, page).then(rows => {
+    db.GetMessages(author, useID, since, before, contains, page, sortby, sorttype).then(rows => {
         res.render('logpage', {
             url: fullUrl,
             page: page,
@@ -48,6 +50,8 @@ app.get('/logs', (req, res) =>{
             since: since,
             before: before,
             contains: contains,
+            sortby: sortby,
+            sorttype: sorttype,
             messages: rows
         });
     });

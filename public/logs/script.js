@@ -5,6 +5,8 @@ function search(){
     const date1 = document.getElementById("date1").value;
     const date2 = document.getElementById("date2").value;
     const contains = document.getElementById("contains").value;
+    const sortby = document.getElementById("sortby").value;
+    const sorttype = document.getElementById("sorttype").value;
 
     let params = new URLSearchParams();
 
@@ -13,6 +15,10 @@ function search(){
     if(date1.length != 0) params.append("since", date1);
     if(date2.length != 0) params.append("before", date2);
     if(contains.length != 0) params.append("contains", contains);
+    if(sortby != "none"){
+        params.append("sortby", sortby);
+        params.append("sorttype", sorttype);
+    }
 
     window.location.href = window.location.origin + "/logs/" + "?" + params;
 }

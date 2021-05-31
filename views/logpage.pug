@@ -35,6 +35,37 @@ html(lang="en")
 
                     br
 
+                    select#sortby(name = "Sort by")
+                        if sortby == "none"
+                            option(value="none", selected disabled hidden) None
+                        else
+                            option(value="none") None
+
+                        if sortby == "date"
+                            option(value="date", selected disabled hidden) Date
+                        else
+                            option(value="date") Date
+
+                        if sortby == "author"
+                            option(value="author", selected disabled hidden) Author
+                        else
+                            option(value="author") Author
+
+                        if sortby == "content"
+                            option(value="content", selected disabled hidden) Content
+                        else
+                            option(value="content") Content
+
+                    select#sorttype(name = "Sort type", selected=sorttype)
+                        if sorttype == "asc"
+                            option(value="asc", selected disabled hidden) Ascending 
+                            option(value="desc") Descending
+                        else
+                            option(value="asc") Ascending 
+                            option(value="desc", selected disabled hidden) Descending
+                    
+                    br
+
                 input(type="button", id="find", onclick="search()" value="Search")
                 input(type="button", id="reset", onclick="reset()", value="Reset")
 
