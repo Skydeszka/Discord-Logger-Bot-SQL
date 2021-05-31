@@ -24,14 +24,14 @@ function search(){
 
 
 function reset(){
-    const author = document.getElementById("authorName").value = null;
-    const useID = document.getElementById("useID").checked = false;
-    const origindate1 = document.getElementById("origindate1").value = null;
-    const origindate2 = document.getElementById("origindate2").value = null;
-    const editdate1 = document.getElementById("editdate1").value = null;
-    const editdate2 = document.getElementById("editdate2").value = null;
-    const origincontains = document.getElementById("origincontains").value = null;
-    const editcontains = document.getElementById("editcontains").value = null;
+    document.getElementById("authorName").value = null;
+    document.getElementById("useID").checked = false;
+    document.getElementById("origindate1").value = null;
+    document.getElementById("origindate2").value = null;
+    document.getElementById("editdate1").value = null;
+    document.getElementById("editdate2").value = null;
+    document.getElementById("origincontains").value = null;
+    document.getElementById("editcontains").value = null;
 
     window.location.href = window.location.origin + "/edits/"
 }
